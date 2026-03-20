@@ -198,11 +198,11 @@
                         <div>
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="h-px w-8 bg-kigongoniOrange"></div>
-                                <span class="text-kigongoniOrange text-xs font-black uppercase tracking-[0.3em]">{{ __('Accommodation') }} · {{ __('Standard Triple Room') }}</span>
+                                <span class="text-kigongoniOrange text-xs font-black uppercase tracking-[0.3em]">{{ __('Accommodation') }}</span>
                             </div>
                             <h1 class="text-5xl md:text-6xl font-black text-white uppercase tracking-tight leading-none mb-5">
                                 Standard<br>
-                                <span class="text-kigongoniOrange" style="text-shadow: 0 0 40px rgba(239,74,37,0.5);">Triple</span>
+                                <span class="text-kigongoniOrange" style="text-shadow: 0 0 40px rgba(239,74,37,0.5);">Triple Room</span>
                             </h1>
                             <div class="flex flex-wrap gap-2 mb-5">
                                 <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-green-400/40 text-green-300" style="background: rgba(74,222,128,0.12); backdrop-filter: blur(8px);">
@@ -231,6 +231,8 @@
                                 ['Net',       'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
                                 ['Breakfast', 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'],
                                 ['Wardrobe',  'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'],
+                                ['Laundry',   'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'],
+                                ['Ext. Cable','M9 3v4m6-4v4M7 7h10v3a5 5 0 01-10 0V7z m5 5v9'],
                             ] as [$label, $path])
                             <div class="flex flex-col items-center gap-1.5">
                                 <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2);">
@@ -364,7 +366,10 @@
                             ['Breakfast Incl.','M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'],
                             ['Mosquito Net','M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
                             ['Wardrobe','M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'],
-                            ['Non-Smoking','M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636'],
+                            ['Solar Power Backup','M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'],
+                            ['Electric Kettle','M4 19h16M7 19v-2a4 4 0 014-4h2a4 4 0 014 4v2M9 11V7m4 4V5m4 6V8'],
+                            ['Laundry (Extra Fee)','M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'],
+                            ['Extension Cable','M9 3v4m6-4v4M7 7h10v3a5 5 0 01-10 0V7z m5 5v9'],
                             ['Double + Single Bed','M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
                         ] as [$name, $path])
                         <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-kigongoniOrange transition duration-300 group">
@@ -580,8 +585,8 @@ function isLowSeason(date) {
     if (priceEl) priceEl.textContent = low ? PRICES.low : PRICES.high;
     const noteEl = document.getElementById('season-note');
     if (noteEl) noteEl.textContent = low
-        ? '🟦 ' + '{{ __("Low Season — Jan · Feb · Mar · Apr") }}'
-        : '🟠 ' + '{{ __("High Season — May · Jun · Jul · Aug · Sep · Oct · Nov · Dec") }}';
+        ? '{{ __("Low Season — Jan · Feb · Mar · Apr") }}'
+        : '{{ __("High Season — May · Jun · Jul · Aug · Sep · Oct · Nov · Dec") }}';
 })();
 
 // ─── Sticky/Mobile Calendar ────────────────────────────────────

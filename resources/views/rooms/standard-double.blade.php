@@ -254,13 +254,15 @@
                         {{-- Amenity icons row --}}
                         <div class="flex flex-wrap gap-3 pt-4 border-t border-white/10">
                             @foreach([
-                                ['A/C',       'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'],
-                                ['Wi-Fi',     'M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0'],
-                                ['TV',        'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'],
-                                ['Shower',    'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z'],
-                                ['Net',       'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
-                                ['Breakfast', 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'],
-                                ['Wardrobe',  'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'],
+                                ['A/C',         'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'],
+                                ['Wi-Fi',       'M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0'],
+                                ['TV',          'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'],
+                                ['Shower',      'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z'],
+                                ['Net',         'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
+                                ['Breakfast',   'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'],
+                                ['Wardrobe',    'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'],
+                                ['Laundry',     'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'],
+                                ['Ext. Cable',  'M9 3v4 M15 3v4 M7 7h10v3a5 5 0 01-10 0V7z M12 12v9'],
                             ] as [$label, $path])
                             <div class="flex flex-col items-center gap-1.5">
                                 <div class="w-11 h-11 rounded-xl flex items-center justify-center"
@@ -486,9 +488,27 @@
                         </div>
                         <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-kigongoniOrange transition duration-300 group">
                             <div class="w-10 h-10 rounded-full bg-kigongoniOrange/10 flex items-center justify-center flex-shrink-0 group-hover:bg-kigongoniOrange/20 transition">
-                                <svg class="w-5 h-5 text-kigongoniOrange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                                <svg class="w-5 h-5 text-kigongoniOrange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                             </div>
-                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ __('Non-Smoking') }}</span>
+                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ __('Solar Power Backup') }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-kigongoniOrange transition duration-300 group">
+                            <div class="w-10 h-10 rounded-full bg-kigongoniOrange/10 flex items-center justify-center flex-shrink-0 group-hover:bg-kigongoniOrange/20 transition">
+                                <svg class="w-5 h-5 text-kigongoniOrange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19h16M7 19v-2a4 4 0 014-4h2a4 4 0 014 4v2M9 11V7m4 4V5m4 6V8"/></svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ __('Electric Kettle') }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-kigongoniOrange transition duration-300 group">
+                            <div class="w-10 h-10 rounded-full bg-kigongoniOrange/10 flex items-center justify-center flex-shrink-0 group-hover:bg-kigongoniOrange/20 transition">
+                                <svg class="w-5 h-5 text-kigongoniOrange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ __('Laundry (Extra Fee)') }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-kigongoniOrange transition duration-300 group">
+                            <div class="w-10 h-10 rounded-full bg-kigongoniOrange/10 flex items-center justify-center flex-shrink-0 group-hover:bg-kigongoniOrange/20 transition">
+                                <svg class="w-5 h-5 text-kigongoniOrange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v4m6-4v4M7 7h10v3a5 5 0 01-10 0V7z m5 5v9"/></svg>
+                            </div>
+                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ __('Extension Cable') }}</span>
                         </div>
                         <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-kigongoniOrange transition duration-300 group">
                             <div class="w-10 h-10 rounded-full bg-kigongoniOrange/10 flex items-center justify-center flex-shrink-0 group-hover:bg-kigongoniOrange/20 transition">

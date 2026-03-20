@@ -44,7 +44,6 @@
                 <h2 class="text-2xl font-semibold text-kigongoniBlue dark:text-white mb-3">{{ __('terms.s4_title') }}</h2>
                 <p class="mb-2">{{ __('terms.s4_intro') }}</p>
                 <ul class="list-disc pl-5 space-y-2">
-                    <li>{{ __('terms.s4_li1') }}</li>
                     <li>{{ __('terms.s4_li2') }}</li>
                     <li>{{ __('terms.s4_li3') }}</li>
                 </ul>

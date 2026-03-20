@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth overflow-x-hidden">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,12 +34,9 @@
     </script>
     
     <style>
-        /* ----------------------------------------------------
-           KUZUIA HORIZONTAL SCROLL (SIMU KUTANUKA)
-           ---------------------------------------------------- */
+        /* Tumeacha max-width pekee, tumetoa overflow kuzuia inner scroll */
         html, body {
             max-width: 100%;
-            overflow-x: hidden;
         }
 
         body { font-family: 'Poppins', sans-serif; }
@@ -332,7 +329,7 @@
     
 </head>
 
-<body id="home" class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-x-hidden transition-colors duration-300 relative">
+<body id="home" class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 relative">
 
     <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 border-b-4 border-kigongoniOrange transition-colors duration-300">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center max-w-7xl">
@@ -399,168 +396,147 @@
         </div>
     </nav>
 
-    <main class="dark:bg-gray-900 transition-colors duration-300">
-        @yield('content')
-    </main>
+    {{-- WRAPPER MPYA KUZUIA WEBSITE KUTANUKA (LAKINI INAACHA MENU IGANDE JUU) --}}
+    <div class="overflow-x-hidden w-full">
+        <main class="dark:bg-gray-900 transition-colors duration-300">
+            @yield('content')
+        </main>
 
-    {{-- ============================================================
-         FOOTER
-    ============================================================ --}}
-    <footer id="main-footer" class="bg-kigongoniBlue dark:bg-gray-950 text-gray-300 pt-20 pb-8 mt-20 relative border-t-4 border-kigongoniOrange transition-colors duration-300 overflow-hidden">
-        
-        {{-- PATTERN YA VIBOX, GRADIENT GLOW, NA SPOTLIGHT --}}
-        <div class="absolute inset-0 z-0 pointer-events-none" style="mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%);">
-            <div class="absolute inset-0 opacity-[0.25]" 
-                 style="background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px); 
-                        background-size: 50px 50px; 
-                        animation: moveGrid 3s linear infinite;">
+        {{-- ============================================================
+             FOOTER
+        ============================================================ --}}
+        <footer id="main-footer" class="bg-kigongoniBlue dark:bg-gray-950 text-gray-300 pt-20 pb-8 mt-20 relative border-t-4 border-kigongoniOrange transition-colors duration-300 overflow-hidden">
+            
+            {{-- PATTERN YA VIBOX, GRADIENT GLOW, NA SPOTLIGHT --}}
+            <div class="absolute inset-0 z-0 pointer-events-none" style="mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%);">
+                <div class="absolute inset-0 opacity-[0.25]" 
+                     style="background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px); 
+                            background-size: 50px 50px; 
+                            animation: moveGrid 3s linear infinite;">
+                </div>
+                <div class="absolute inset-0" 
+                     style="background: radial-gradient(circle at top center, rgba(239, 74, 37, 2) 0%, transparent 85%); 
+                            animation: pulseGlow 1s ease-in-out infinite;">
+                </div>
             </div>
-            <div class="absolute inset-0" 
-                 style="background: radial-gradient(circle at top center, rgba(239, 74, 37, 2) 0%, transparent 85%); 
-                        animation: pulseGlow 1s ease-in-out infinite;">
-            </div>
-        </div>
 
-        <div class="container mx-auto px-4 max-w-7xl relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                
-                {{-- Column 1: About, Socials & Reviews --}}
-                <div class="space-y-6">
-                    <img src="{{ asset('images/logo.png') }}" alt="Kigongoni Gazella Logo" class="h-16 w-auto brightness-0 invert">
-                    <p class="text-sm leading-relaxed text-gray-400 mb-6">
-                        Experience the ultimate safari gateway in Mto wa Mbu, Manyara. Kigongoni Gazella Hotel offers unmatched comfort, culture, and nature for an unforgettable stay.
-                    </p>
+            <div class="container mx-auto px-4 max-w-7xl relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     
-                    <div class="grid grid-cols-2 gap-4">
-                        {{-- OUR SOCIALS --}}
-                        <div>
-                            <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
-                                OUR SOCIALS
-                                <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
-                            </h4>
-                            <div class="flex flex-col space-y-3">
-                                {{-- Hotel IG --}}
-                                <a href="https://www.instagram.com/kigongonigazellahotel?igsh=aTQ4enpzdHJxOXQy" target="_blank" class="flex items-center gap-3 group">
-                                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
-                                    </div>
-                                    <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Hotel IG</span>
-                                </a>
-                                {{-- Supermarket IG --}}
-                                <a href="https://www.instagram.com/kigongoni_mini_supermarket?igsh=MWJwOW1nODk0YWhybQ==" target="_blank" class="flex items-center gap-3 group">
-                                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
-                                    </div>
-                                    <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Supermarket</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        {{-- LEAVE US A REVIEW --}}
-                        <div>
-                            <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
-                                A REVIEW?
-                                <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
-                            </h4>
-                            <div class="flex flex-col space-y-3">
-                                {{-- TripAdvisor --}}
-                                <a href="https://www.tripadvisor.com/Profile/kigongonigazelahotel/photo/840433008?m=19905" target="_blank" class="flex items-center gap-3 group">
-                                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.38 10.33c-.26-.14-.56-.16-.84-.04-.28.12-.5.35-.61.64l-1.07 2.85c-.46 1.22-1.36 2.19-2.52 2.7-.19.08-.32.27-.32.48v1.36c0 .16-.08.31-.22.4-.14.09-.31.11-.47.05l-4.14-1.54-4.14 1.54c-.16.06-.33.04-.47-.05-.14-.09-.22-.24-.22-.4v-1.36c0-.21-.13-.4-.32-.48-1.16-.51-2.06-1.48-2.52-2.7l-1.07-2.85c-.11-.29-.33-.52-.61-.64-.28-.12-.58-.1-.84.04-.26.14-.45.38-.52.67l-1.28 5.66c-.1.44.02.9.33 1.23.31.33.74.52 1.19.52h18.66c.45 0 .88-.19 1.19-.52.31-.33.43-.79.33-1.23l-1.28-5.66c-.07-.29-.26-.53-.52-.67zM12 2.6c-4.63 0-8.4 3.77-8.4 8.4 0 4.63 3.77 8.4 8.4 8.4 4.63 0 8.4-3.77 8.4-8.4 0-4.63-3.77-8.4-8.4-8.4zm0 15c-3.64 0-6.6-2.96-6.6-6.6s2.96-6.6 6.6-6.6 6.6 2.96 6.6 6.6-2.96 6.6-6.6 6.6zM7.5 7.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5.4c-1.05 0-1.9-.85-1.9-1.9s.85-1.9 1.9-1.9 1.9 .85 1.9 1.9-.85 1.9-1.9 1.9zm9 0c-1.05 0-1.9-.85-1.9-1.9s.85-1.9 1.9-1.9 1.9 .85 1.9 1.9-.85 1.9-1.9 1.9zm0-5.4c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5z"/></svg>
-                                    </div>
-                                    <span class="text-sm text-gray-400 group-hover:text-white transition-colors">TripAdvisor</span>
-                                </a>
-                                {{-- Google --}}
-                                <a href="https://share.google/b5DNapTL0jExr6Tdm" target="_blank" class="flex items-center gap-3 group">
-                                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
-                                    </div>
-                                    <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Google</span>
-                                </a>
+                    {{-- Column 1: About, Socials & Reviews --}}
+                    <div class="space-y-6">
+                        <img src="{{ asset('images/logo.png') }}" alt="Kigongoni Gazella Logo" class="h-16 w-auto brightness-0 invert">
+                        <p class="text-sm leading-relaxed text-gray-400 mb-6">
+                            Experience the ultimate safari gateway in Mto wa Mbu, Manyara. Kigongoni Gazella Hotel offers unmatched comfort, culture, and nature for an unforgettable stay.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            {{-- OUR SOCIALS --}}
+                            <div>
+                                <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
+                                    OUR SOCIALS
+                                    <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
+                                </h4>
+                                <div class="flex flex-col space-y-3">
+                                    {{-- Hotel IG --}}
+                                    <a href="https://www.instagram.com/kigongonigazellahotel?igsh=aTQ4enpzdHJxOXQy" target="_blank" class="flex items-center gap-3 group">
+                                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
+                                        </div>
+                                        <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Hotel IG</span>
+                                    </a>
+                                    {{-- Supermarket IG --}}
+                                    <a href="https://www.instagram.com/kigongoni_mini_supermarket?igsh=MWJwOW1nODk0YWhybQ==" target="_blank" class="flex items-center gap-3 group">
+                                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
+                                        </div>
+                                        <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Supermarket</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    {{-- Column 2: Quick Links --}}
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
+                            Quick Links
+                            <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
+                        </h3>
+                        <ul class="space-y-3 text-sm">
+                            <li><a href="{{ url('/') }}#about" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> About Us</a></li>
+                            <li><a href="{{ url('/') }}#rooms" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Accommodation</a></li>
+                            <li><a href="{{ url('/') }}#gallery" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Gallery</a></li>
+                            <li><a href="{{ url('/') }}#contact" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Contact Us</a></li>
+                        </ul>
+                    </div>
+
+                    {{-- Column 3: Our Services --}}
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
+                            Our Services
+                            <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
+                        </h3>
+                        <ul class="space-y-3 text-sm">
+                            <li><a href="{{ url('/') }}#restaurant" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Restaurant & Bar</a></li>
+                            <li><a href="{{ url('/') }}#meetings" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Meetings & Events</a></li>
+                            <li><a href="{{ route('services.shuttle') }}" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Airport Shuttle</a></li>
+                            <li><a href="{{ route('services.bicycle') }}" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Complimentary Bicycles</a></li>
+                        </ul>
+                    </div>
+
+                    {{-- Column 4: Contact Us --}}
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
+                            Get in Touch
+                            <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
+                        </h3>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex items-start gap-3 text-gray-400">
+                                <svg class="w-5 h-5 text-kigongoniOrange flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <span>Mto wa Mbu, Manyara<br>Tanzania</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-gray-400">
+                                <svg class="w-5 h-5 text-kigongoniOrange flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                <a href="tel:+255768219703" class="hover:text-white transition-colors">+255 768 219 703</a>
+                            </li>
+                            <li class="flex items-center gap-3 text-gray-400">
+                                <svg class="w-5 h-5 text-kigongoniOrange flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                <a href="mailto:gazellakigongoni@gmail.com" class="hover:text-white transition-colors">gazellakigongoni@gmail.com</a>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
 
-                {{-- Column 2: Quick Links --}}
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
-                        Quick Links
-                        <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
-                    </h3>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="{{ url('/') }}#about" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> About Us</a></li>
-                        <li><a href="{{ url('/') }}#rooms" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Accommodation</a></li>
-                        <li><a href="{{ url('/') }}#gallery" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Gallery</a></li>
-                        <li><a href="{{ url('/') }}#contact" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Contact Us</a></li>
+                {{-- SEHEMU YA CHINI --}}
+                <div class="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-400 relative z-10">
+                    <div class="flex items-center gap-2">
+                        <p>&copy; {{ date('Y') }} Kigongoni Gazella Hotel.</p>
+                        <span class="hidden md:inline-block w-px h-4 bg-white/20"></span>
+                        <p>All rights reserved.</p>
+                    </div>
+                    <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-0 md:bg-white/5 md:border md:border-white/10 md:rounded-lg overflow-hidden">
+                        <li class="border md:border-none border-white/10 rounded md:rounded-none">
+                            <a href="{{ route('privacy') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">
+                                Privacy Policy
+                            </a>
+                        </li>
+                        <li class="border md:border-none border-white/10 rounded md:rounded-none">
+                            <a href="{{ route('terms') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">
+                                Terms of Service
+                            </a>
+                        </li>
+                        <li class="border md:border-none border-white/10 rounded md:rounded-none">
+                            <a href="{{ route('faq') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors">
+                                FAQ
+                            </a>
+                        </li>
                     </ul>
                 </div>
-
-                {{-- Column 3: Our Services --}}
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
-                        Our Services
-                        <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
-                    </h3>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="{{ url('/') }}#restaurant" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Restaurant & Bar</a></li>
-                        <li><a href="{{ url('/') }}#meetings" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Meetings & Events</a></li>
-                        <li><a href="{{ route('services.shuttle') }}" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Airport Shuttle</a></li>
-                        <li><a href="{{ route('services.bicycle') }}" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Complimentary Bicycles</a></li>
-                    </ul>
-                </div>
-
-                {{-- Column 4: Contact Us --}}
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
-                        Get in Touch
-                        <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
-                    </h3>
-                    <ul class="space-y-4 text-sm">
-                        <li class="flex items-start gap-3 text-gray-400">
-                            <svg class="w-5 h-5 text-kigongoniOrange flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span>Mto wa Mbu, Manyara<br>Tanzania</span>
-                        </li>
-                        <li class="flex items-center gap-3 text-gray-400">
-                            <svg class="w-5 h-5 text-kigongoniOrange flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                            <a href="tel:+255768219703" class="hover:text-white transition-colors">+255 768 219 703</a>
-                        </li>
-                        <li class="flex items-center gap-3 text-gray-400">
-                            <svg class="w-5 h-5 text-kigongoniOrange flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <a href="mailto:gazellakigongoni@gmail.com" class="hover:text-white transition-colors">gazellakigongoni@gmail.com</a>
-                        </li>
-                    </ul>
-                </div>
-
             </div>
-
-            {{-- SEHEMU YA CHINI --}}
-            <div class="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-400 relative z-10">
-                <div class="flex items-center gap-2">
-                    <p>&copy; {{ date('Y') }} Kigongoni Gazella Hotel.</p>
-                    <span class="hidden md:inline-block w-px h-4 bg-white/20"></span>
-                    <p>All rights reserved.</p>
-                </div>
-                <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-0 md:bg-white/5 md:border md:border-white/10 md:rounded-lg overflow-hidden">
-                    <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                        <a href="{{ route('privacy') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">
-                            Privacy Policy
-                        </a>
-                    </li>
-                    <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                        <a href="{{ route('terms') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">
-                            Terms of Service
-                        </a>
-                    </li>
-                    <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                        <a href="{{ route('faq') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors">
-                            FAQ
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div> {{-- MWISHO WA WRAPPER YA KUZUIA HORIZONTAL SCROLL --}}
 
     {{-- FLOATING WHATSAPP BUTTON --}}
     <div class="whatsapp-float-container">
@@ -587,7 +563,7 @@
                         <span class="wave">👋</span>
                     </p>
                     <p class="offer-text">
-                        Happy New Year! Enquire today and get the best room at best price ever now?
+                        Welcome! Ready for an unforgettable stay? Enquire today for our best available rates and book your perfect room
                     </p>
                 </div>
                 <a href="https://wa.me/255768219703?text=Hello%20Kigongoni%20Gazella%20Hotel!%20I'm%20interested%20in%20booking%20a%20room.%20Can%20you%20help%20me%20with%20availability%3F" 
@@ -665,13 +641,7 @@
                 whatsappPopup.addEventListener('click', (e) => e.stopPropagation());
                 document.addEventListener('click', () => whatsappPopup.classList.remove('active'));
             }
-
-            setTimeout(() => {
-                if (whatsappPopup && !whatsappPopup.classList.contains('active')) {
-                    whatsappPopup.classList.add('active');
-                    setTimeout(() => whatsappPopup.classList.remove('active'), 10000);
-                }
-            }, 5000);
+            // Mstari wa kuifungua automatically (setTimeout) umeondolewa hapa
         });
 
         // ── MOBILE MENU ──────────────────────────────────────────────

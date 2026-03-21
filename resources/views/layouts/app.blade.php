@@ -430,7 +430,9 @@
                             Experience the ultimate safari gateway in Mto wa Mbu, Manyara. Kigongoni Gazella Hotel offers unmatched comfort, culture, and nature for an unforgettable stay.
                         </p>
                         
-                        <div class="grid grid-cols-2 gap-4">
+                        {{-- GRID YA SOCIALS NA REVIEWS (BALANCED KWA SIMU) --}}
+                        <div class="grid grid-cols-2 gap-2">
+                            
                             {{-- OUR SOCIALS --}}
                             <div>
                                 <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
@@ -454,7 +456,36 @@
                                     </a>
                                 </div>
                             </div>
+
+                            {{-- REVIEW US ON --}}
+                            <div class="ml-4 md:ml-8">
+                                <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
+                                    REVIEW US ON
+                                    <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
+                                </h4>
+                                <div class="flex items-start gap-5">
+                                    {{-- TripAdvisor Link --}}
+                                    <a href="https://www.tripadvisor.com/Profile/kigongonigazelahotel" target="_blank" class="flex flex-col items-center gap-2 group" title="Review us on TripAdvisor">
+                                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#34E0A1]/10 text-[#34E0A1] group-hover:bg-[#34E0A1] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12.016 1.815c5.626 0 10.187 4.561 10.187 10.187S17.642 22.19 12.016 22.19 1.828 17.629 1.828 12.002c0-5.626 4.561-10.187 10.188-10.187zm0 1.572c-4.757 0-8.614 3.857-8.614 8.615s3.857 8.614 8.614 8.614 8.615-3.857 8.615-8.614-3.858-8.615-8.615-8.615zm-4.394 6.702c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm8.788 0c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm-4.394 6.275c-1.336 0-2.418-1.082-2.418-2.418s1.082-2.418 2.418-2.418c1.336 0 2.418 1.082 2.418 2.418s-1.082 2.418-2.418 2.418zm-4.394-5.334c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723zm8.788 0c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723z"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-[10px] md:text-xs text-gray-400 group-hover:text-white transition-colors text-center">TripAdvisor</span>
+                                    </a>
+                                    {{-- Google Review Link --}}
+                                    <a href="https://share.google/b5DNapTL0jExr6Tdm" target="_blank" class="flex flex-col items-center gap-2 group" title="Review us on Google">
+                                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#EA4335]/10 text-[#EA4335] group-hover:bg-[#EA4335] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-[10px] md:text-xs text-gray-400 group-hover:text-white transition-colors text-center">Google</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
 
                     {{-- Column 2: Quick Links --}}
@@ -641,7 +672,6 @@
                 whatsappPopup.addEventListener('click', (e) => e.stopPropagation());
                 document.addEventListener('click', () => whatsappPopup.classList.remove('active'));
             }
-            // Mstari wa kuifungua automatically (setTimeout) umeondolewa hapa
         });
 
         // ── MOBILE MENU ──────────────────────────────────────────────

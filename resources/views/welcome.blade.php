@@ -886,7 +886,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</p>
-                            <p class="font-black text-kigongoniBlue dark:text-white">gazellakigongoni@gmail.com</p>
+                            <p class="font-black text-kigongoniBlue dark:text-white">booking@kigongonigazella.co.tz</p>
                         </div>
                     </div>
                 </div>

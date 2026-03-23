@@ -162,7 +162,7 @@
                         </svg>
                     </div>
                     <p class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">{{ __('Email') }}</p>
-                    <p class="font-black text-kigongoniBlue dark:text-white text-sm break-all">gazellakigongoni@gmail.com</p>
+                    <p class="font-black text-kigongoniBlue dark:text-white text-sm break-all">booking@kigongonigazella.co.tz</p>
                 </a>
 
             </div>

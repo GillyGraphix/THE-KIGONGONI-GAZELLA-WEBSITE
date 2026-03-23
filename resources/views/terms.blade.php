@@ -72,7 +72,7 @@
                 <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-100 dark:border-gray-700">
                     <p><strong>Kigongoni Gazella Hotel</strong></p>
                     <p>{{ __('terms.s7_location') }}</p>
-                    <p>Email: <a href="mailto:gazellakigongoni@gmail.com" class="text-kigongoniOrange hover:underline">gazellakigongoni@gmail.com</a></p>
+                    <p>Email: <a href="booking@kigongonigazella.co.tz" class="text-kigongoniOrange hover:underline">booking@kigongonigazella.co.tz</a></p>
                     <p>{{ __('terms.s7_phone') }}</p>
                 </div>
             </section>

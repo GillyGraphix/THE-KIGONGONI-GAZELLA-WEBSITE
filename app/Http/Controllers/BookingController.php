@@ -152,7 +152,8 @@ class BookingController extends Controller
         ];
 
         // ── Tuma email kwa HOTEL (wewe) ──────────────────────────
-        Mail::to(env('HOTEL_NOTIFY_EMAIL', config('mail.from.address')))
+        // Hapa nimeiweka moja kwa moja iende kwenye email mpya
+        Mail::to('booking@kigongonigazella.co.tz')
             ->send(new BookingHotelMail($bookingData));
 
         // ── Tuma email kwa MTEJA ─────────────────────────────────

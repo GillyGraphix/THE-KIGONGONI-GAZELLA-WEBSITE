@@ -100,7 +100,7 @@
     </section>
 
     {{-- ============================================================
-         LIGHTBOX (Inabaki vilevile kwa sababu inafanya kazi vizuri)
+         LIGHTBOX
     ============================================================ --}}
     <div id="lightbox" class="fixed inset-0 z-[9999] hidden" role="dialog" aria-modal="true">
         <div id="lb-backdrop" class="absolute inset-0 bg-black/90"></div>
@@ -111,7 +111,8 @@
                 <span class="text-white/70 text-[10px] font-black uppercase tracking-[0.3em]">{{ __('Kigongoni Gazella') }}</span>
             </div>
             <div class="flex items-center gap-4">
-                <a id="lb-download" href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-kigongoniOrange transition">
+                {{-- Tumeongeza 'download' attribute hapa --}}
+                <a id="lb-download" href="#" download class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-kigongoniOrange transition" title="Download Image">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                 </a>
                 <button id="lb-close" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-kigongoniOrange transition">
@@ -196,7 +197,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 lbImg.classList.remove('entering');
                 lbImg.classList.add('visible');
             };
+            
+            // Tunaseta link ya kudownload na jina la file hapa
             downloadBtn.href = srcs[current];
+            // Tunavuta jina la picha kutoka kwenye URL (mfano: picha1.jpg)
+            const fileName = srcs[current].split('/').pop() || 'kigongoni-gazella-photo.jpg';
+            downloadBtn.setAttribute('download', fileName);
             
             // Update thumbs
             filmstrip.querySelectorAll('.filmstrip-thumb').forEach((t, i) => {

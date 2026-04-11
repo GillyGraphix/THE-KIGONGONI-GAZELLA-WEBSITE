@@ -8,6 +8,26 @@
     {{-- Favicon Settings --}}
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
+
+    {{-- ── PWA & MOBILE APP SETTINGS (HATUA YA 3) ────────────────── --}}
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#ef4a25">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kigongoni">
+    
+    {{-- Service Worker Registration --}}
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => console.log('Service Worker registered!'))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
+    {{-- ────────────────────────────────────────────────────────── --}}
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -344,6 +364,7 @@
         .footer-online {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 4px;
         }
 
@@ -676,6 +697,14 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 15l7-7 7 7"></path></svg>
     </button>
 
+    {{-- PWA INSTALL BUTTON (Itafichwa mwanzo, itaonekana tu kama simu inaruhusu ku-install) --}}
+    <button id="pwa-install-btn" class="hidden fixed bottom-28 left-6 z-[9999] bg-white dark:bg-gray-800 text-kigongoniOrange border-2 border-kigongoniOrange px-4 py-2 rounded-full shadow-lg font-bold flex items-center gap-2 hover:bg-kigongoniOrange hover:text-white transition-all duration-300 group">
+        <svg class="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        <span class="text-sm">Install App</span>
+    </button>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -696,7 +725,6 @@
             if (vibeAudio && vibeWidget) {
                 vibeAudio.volume = 0.4;
 
-                // 1. CHUKUA MUDA ULIOSIVIWA KUTOKA KWENYE SESSION STORAGE (KAMA UPO)
                 const savedTime = sessionStorage.getItem('vibeCurrentTime');
                 if (savedTime) {
                     vibeAudio.currentTime = parseFloat(savedTime);
@@ -792,7 +820,6 @@
                     collapseWidget();
                 });
 
-                // 2. HIFADHI MUDA KILA SEKUNDE
                 function updateTimer() {
                     if (isNaN(vibeAudio.duration)) return;
                     const remainingTime = Math.floor(vibeAudio.duration - vibeAudio.currentTime);
@@ -800,7 +827,6 @@
                     const seconds = remainingTime % 60;
                     vibeTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-                    // Hapa ndipo tunasave muda ili akihama page akute ulipoishia
                     sessionStorage.setItem('vibeCurrentTime', vibeAudio.currentTime);
                 }
                 
@@ -834,9 +860,9 @@
             activeScrollMenu();
 
             // ── WHATSAPP POPUP ───────────────────────────────────────
-            const whatsappBtn  = document.getElementById('whatsappButton');
+            const whatsappBtn   = document.getElementById('whatsappButton');
             const whatsappPopup = document.getElementById('whatsappPopup');
-            const closeBtn     = document.getElementById('closePopup');
+            const closeBtn      = document.getElementById('closePopup');
 
             if (whatsappBtn && whatsappPopup && closeBtn) {
                 whatsappBtn.addEventListener('click', (e) => { e.stopPropagation(); whatsappPopup.classList.toggle('active'); });
@@ -896,6 +922,47 @@
             }
         });
         scrollToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ── PWA INSTALLATION LOGIC ──────────────────────────────────
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwa-install-btn');
+
+        // Hii event inatokea kama browser imeona website ina vigezo vya kuwa App
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Zuia browser isilete ile popup yake ya kawaida chini
+            e.preventDefault();
+            // Hifadhi event ili tuitumie mteja akibonyeza button yetu
+            deferredPrompt = e;
+            // Onyesha button yetu nzuri (toa class ya 'hidden')
+            installBtn.classList.remove('hidden');
+        });
+
+        // Mteja akibonyeza button yetu
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt !== null) {
+                // Onyesha popup ya simu (mfano: Install "Kigongoni Gazella"?)
+                deferredPrompt.prompt();
+                
+                // Subiri mteja achague 'Install' au 'Cancel'
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('Mteja amekubali ku-install App');
+                } else {
+                    console.log('Mteja ameahirisha');
+                }
+                
+                // Futa event, inatumika mara moja tu
+                deferredPrompt = null;
+                // Ficha button
+                installBtn.classList.add('hidden');
+            }
+        });
+
+        // Kama mteja amesha-install, ficha button moja kwa moja
+        window.addEventListener('appinstalled', () => {
+            installBtn.classList.add('hidden');
+            console.log('Kigongoni App imewekwa kikamilifu!');
+        });
     </script>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

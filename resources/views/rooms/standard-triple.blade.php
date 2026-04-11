@@ -213,7 +213,7 @@
                                     {{ __('Max 3 Guests') }}
                                 </span>
                                 <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-white/20 text-white/80" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l-5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
                                     ~35 m²
                                 </span>
                                 <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-white/20 text-white/80" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);">
@@ -563,6 +563,8 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 const checkoutRoute = "{{ route('booking.checkout', 2) }}";
 
@@ -662,8 +664,26 @@ document.getElementById('cal-next-mob')?.addEventListener('click', () => { calMo
 
 function toISO(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 
+// HAPA NDIPO NIMEREKEBISHA ALERT IWE YA SWEETALERT
 function handleBookClick(guestsId) {
-    if (!checkIn || !checkOut) { alert('Please select check-in and check-out dates.'); return; }
+    if (!checkIn || !checkOut) {
+        const isDark = document.documentElement.classList.contains('dark');
+        Swal.fire({
+            icon: 'warning',
+            title: "{{ __('Dates Not Selected') }}",
+            text: "{{ __('Please select your check-in and check-out dates first.') }}",
+            confirmButtonText: "{{ __('OK') }}",
+            confirmButtonColor: '#ef4a25',
+            background: isDark ? '#1f2937' : '#ffffff',
+            color: isDark ? '#ffffff' : '#374151',
+            customClass: {
+                popup: 'rounded-2xl border dark:border-gray-700',
+                title: 'text-kigongoniBlue dark:text-white font-black uppercase tracking-wide',
+                confirmButton: 'font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded-xl shadow-lg'
+            }
+        });
+        return;
+    }
     const guests = document.getElementById(guestsId)?.value || '3 Adults';
     const params = new URLSearchParams({ checkin: toISO(checkIn), checkout: toISO(checkOut), guests, room_type: 'Standard Triple Room', room_price: getDayPrice(checkIn) });
     window.location.href = checkoutRoute + '?' + params.toString();

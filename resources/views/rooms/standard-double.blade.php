@@ -631,7 +631,7 @@
                             </div>
                         </div>
                         <a href="{{ route('booking.checkout', 1) }}?{{ $bookingParams }}"
-                           class="w-full flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-3.5 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-xs shadow-lg mb-3">
+                            class="w-full flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-3.5 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-xs shadow-lg mb-3">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             {{ __('Confirm Booking') }}
                         </a>
@@ -850,6 +850,9 @@
 @endsection
 
 @section('scripts')
+{{-- ── SWEETALERT2 LIBRARY ── --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 // ─── Route helpers (passed from PHP) ─────────────────────────
 const checkoutRoute = "{{ route('booking.checkout', 1) }}";
@@ -881,12 +884,8 @@ function isLowSeason(date) {
 })();
 
 // ─── Calendar (only used when no dates passed from homepage) ──
-// We'll use JS Internationalization API for translated month names if needed,
-// but for now, we'll keep the array. You might want to pass these from Laravel too
-// if you want fully translated month names.
 const monthNames = ['January','February','March','April','May','June',
                     'July','August','September','October','November','December'];
-                    // (To translate these in JS, you'd usually pass an array from Laravel, e.g., @json(__('months_array')))
 
 let calYear  = new Date().getFullYear();
 let calMonth = new Date().getMonth();
@@ -1026,7 +1025,21 @@ function toISO(d) {
 // ─── Book buttons (calendar mode) ─────────────────────────────
 function handleBookClick(guestsSelectId) {
     if (!checkIn || !checkOut) {
-        alert("{{ __('Please select your check-in and check-out dates first.') }}");
+        const isDark = document.documentElement.classList.contains('dark');
+        Swal.fire({
+            icon: 'warning',
+            title: "{{ __('Dates Not Selected') }}",
+            text: "{{ __('Please select your check-in and check-out dates first.') }}",
+            confirmButtonText: "{{ __('OK') }}",
+            confirmButtonColor: '#ef4a25',
+            background: isDark ? '#1f2937' : '#ffffff',
+            color: isDark ? '#ffffff' : '#374151',
+            customClass: {
+                popup: 'rounded-2xl border dark:border-gray-700',
+                title: 'text-kigongoniBlue dark:text-white font-black uppercase tracking-wide',
+                confirmButton: 'font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded-xl shadow-lg'
+            }
+        });
         return;
     }
     const guests = document.getElementById(guestsSelectId)?.value || '2 Adults';
@@ -1093,7 +1106,7 @@ function buildInlineGrid() {
     const firstDay    = new Date(inlineYear, inlineMonth, 1).getDay();
     const daysInMonth = new Date(inlineYear, inlineMonth + 1, 0).getDate();
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // midnight today — dates strictly before today are disabled
+    today.setHours(0, 0, 0, 0);
 
     for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
 
@@ -1103,13 +1116,10 @@ function buildInlineGrid() {
 
         const price     = getDayPrice(date);
         const low       = isLowSeason(date);
-        // Past = strictly before today (today itself is selectable)
         const isPast    = date < today;
         const isCI      = inlineCheckIn  && date.getTime() === inlineCheckIn.getTime();
         const isCO      = inlineCheckOut && date.getTime() === inlineCheckOut.getTime();
         const isInRange = inlineCheckIn && inlineCheckOut && date > inlineCheckIn && date < inlineCheckOut;
-        // In checkout-selection mode: disable today and any date <= checkin
-        // Only disable dates strictly before today — all future dates remain clickable always
         const isDisabled = isPast;
 
         const cell = document.createElement('button');
@@ -1150,25 +1160,22 @@ function renderInlineCal() {
 function onInlineDayClick(date) {
     const modeEl = document.getElementById('inline-mode-label');
     if (!inlineCheckIn || (inlineCheckIn && inlineCheckOut)) {
-        // Fresh start — this click is the check-in
+        // Fresh start
         inlineCheckIn      = date;
         inlineCheckOut     = null;
         inlineSelectingOut = true;
         if(modeEl) modeEl.textContent = modeEl.getAttribute('data-end-text');
     } else if (inlineSelectingOut) {
         if (date.getTime() === inlineCheckIn.getTime()) {
-            // Clicked same check-in date — deselect and restart
             inlineCheckIn      = null;
             inlineCheckOut     = null;
             inlineSelectingOut = false;
             if(modeEl) modeEl.textContent = modeEl.getAttribute('data-start-text');
         } else if (date < inlineCheckIn) {
-            // Clicked a date before current check-in → set as new check-in, reset checkout
             inlineCheckIn      = date;
             inlineCheckOut     = null;
             if(modeEl) modeEl.textContent = modeEl.getAttribute('data-end-text');
         } else {
-            // Valid checkout date — after checkin
             inlineCheckOut     = date;
             inlineSelectingOut = false;
             if(modeEl) modeEl.textContent = modeEl.getAttribute('data-done-text');
@@ -1204,7 +1211,6 @@ function updateInlineSummary() {
     }
 }
 
-// Confirm new dates → reload page with new params
 document.getElementById('inline-confirm-btn')?.addEventListener('click', () => {
     if (!inlineCheckIn || !inlineCheckOut) return;
     const guests = document.getElementById('inline-guests')?.value || '2 Adults';
@@ -1224,7 +1230,6 @@ document.getElementById('inline-confirm-btn')?.addEventListener('click', () => {
     window.location.href = window.location.pathname + '?' + params.toString();
 });
 
-// Nav buttons
 document.getElementById('inline-cal-prev')?.addEventListener('click', () => {
     inlineMonth--;
     if (inlineMonth < 0) { inlineMonth = 11; inlineYear--; }

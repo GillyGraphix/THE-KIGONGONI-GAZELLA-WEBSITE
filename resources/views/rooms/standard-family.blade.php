@@ -539,6 +539,8 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 const checkoutRoute = "{{ route('booking.checkout', 3) }}";
 
@@ -643,7 +645,24 @@ document.getElementById('cal-next-mob')?.addEventListener('click', () => { calMo
 function toISO(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 
 function handleBookClick(guestsId) {
-    if (!checkIn || !checkOut) { alert("{{ __('Please select check-in and check-out dates.') }}"); return; }
+    if (!checkIn || !checkOut) {
+        const isDark = document.documentElement.classList.contains('dark');
+        Swal.fire({
+            icon: 'warning',
+            title: "{{ __('Dates Not Selected') }}",
+            text: "{{ __('Please select your check-in and check-out dates first.') }}",
+            confirmButtonText: "{{ __('OK') }}",
+            confirmButtonColor: '#ef4a25',
+            background: isDark ? '#1f2937' : '#ffffff',
+            color: isDark ? '#ffffff' : '#374151',
+            customClass: {
+                popup: 'rounded-2xl border dark:border-gray-700',
+                title: 'text-kigongoniBlue dark:text-white font-black uppercase tracking-wide',
+                confirmButton: 'font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded-xl shadow-lg'
+            }
+        });
+        return;
+    }
     const guests = document.getElementById(guestsId)?.value || 'Family (4+)';
     const params = new URLSearchParams({ checkin: toISO(checkIn), checkout: toISO(checkOut), guests, room_type: 'Standard Family Room', room_price: getDayPrice(checkIn) });
     window.location.href = checkoutRoute + '?' + params.toString();

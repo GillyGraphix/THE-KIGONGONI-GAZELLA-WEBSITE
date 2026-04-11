@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIGONGONI GAZELLA HOTEL - Mto wa Mbu</title>
     
+    {{-- Favicon Settings --}}
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -34,7 +38,6 @@
     </script>
     
     <style>
-        /* Tumeacha max-width pekee, tumetoa overflow kuzuia inner scroll */
         html, body {
             max-width: 100%;
         }
@@ -86,6 +89,58 @@
         @keyframes pulseGlow {
             0%, 100% { opacity: 0.8; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* ----------------------------------------------------
+           STUDIO WAVES ANIMATIONS
+           ---------------------------------------------------- */
+        .wave-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 3px;
+            height: 16px;
+        }
+        .wave-bar {
+            width: 3px;
+            background-color: white;
+            border-radius: 3px;
+            animation: bounceWave 1s infinite ease-in-out;
+            transform-origin: bottom;
+        }
+        
+        .wave-bar:nth-child(1) { animation-delay: 0.0s; height: 8px; }
+        .wave-bar:nth-child(2) { animation-delay: 0.2s; height: 16px; }
+        .wave-bar:nth-child(3) { animation-delay: 0.4s; height: 10px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.1s; height: 14px; }
+        
+        .waves-paused .wave-bar {
+            animation-play-state: paused;
+            height: 4px !important;
+            transition: height 0.3s ease;
+        }
+
+        @keyframes bounceWave {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1.1); }
+        }
+
+        /* ----------------------------------------------------
+           ANIMATION MPYA: BREATHING GLOW
+           ---------------------------------------------------- */
+        @keyframes breatheGlow {
+            0%, 100% {
+                transform: scale(1.0);
+                box-shadow: 0 0 10px rgba(239, 74, 37, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 25px rgba(239, 74, 37, 0.8);
+            }
+        }
+        
+        .vibe-breathe {
+            animation: breatheGlow 2.5s ease-in-out infinite;
         }
 
         /* ----------------------------------------------------
@@ -324,6 +379,10 @@
                 width: 55px;
                 height: 55px;
             }
+            #vibe-btn-container {
+                bottom: 20px;
+                left: 20px;
+            }
         }
     </style>
     
@@ -344,7 +403,6 @@
                 <span class="sr-only">Kigongoni Gazella Hotel</span>
             </a>
 
-            {{-- MENU YA DESKTOP --}}
             <ul class="hidden lg:flex space-x-6 font-medium text-kigongoniBlue dark:text-gray-300 text-sm">
                 <li><a href="{{ url('/') }}#home" class="nav-link">HOME</a></li>
                 <li><a href="{{ url('/') }}#about" class="nav-link">ABOUT</a></li>
@@ -358,7 +416,6 @@
 
             <div class="flex items-center space-x-3 md:space-x-4">
                 
-                {{-- DARK MODE TOGGLE --}}
                 <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition">
                     <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
@@ -380,7 +437,6 @@
             </div>
         </div>
 
-        {{-- MENU YA SIMU (MOBILE) --}}
         <div id="mobile-menu" class="hidden lg:hidden bg-kigongoniBlue dark:bg-gray-900 text-white absolute w-full left-0 top-full shadow-xl">
             <ul class="flex flex-col p-6 space-y-4 font-semibold">
                 <li><a href="{{ url('/') }}#home" class="nav-link border-b border-gray-700 pb-2 block">HOME</a></li>
@@ -396,18 +452,13 @@
         </div>
     </nav>
 
-    {{-- WRAPPER MPYA KUZUIA WEBSITE KUTANUKA (LAKINI INAACHA MENU IGANDE JUU) --}}
     <div class="overflow-x-hidden w-full">
         <main class="dark:bg-gray-900 transition-colors duration-300">
             @yield('content')
         </main>
 
-        {{-- ============================================================
-             FOOTER
-        ============================================================ --}}
         <footer id="main-footer" class="bg-kigongoniBlue dark:bg-gray-950 text-gray-300 pt-20 pb-8 mt-20 relative border-t-4 border-kigongoniOrange transition-colors duration-300 overflow-hidden">
             
-            {{-- PATTERN YA VIBOX, GRADIENT GLOW, NA SPOTLIGHT --}}
             <div class="absolute inset-0 z-0 pointer-events-none" style="mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%);">
                 <div class="absolute inset-0 opacity-[0.25]" 
                      style="background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px); 
@@ -423,31 +474,25 @@
             <div class="container mx-auto px-4 max-w-7xl relative z-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     
-                    {{-- Column 1: About, Socials & Reviews --}}
                     <div class="space-y-6">
                         <img src="{{ asset('images/logo.png') }}" alt="Kigongoni Gazella Logo" class="h-16 w-auto brightness-0 invert">
                         <p class="text-sm leading-relaxed text-gray-400 mb-6">
                             Experience the ultimate safari gateway in Mto wa Mbu, Manyara. Kigongoni Gazella Hotel offers unmatched comfort, culture, and nature for an unforgettable stay.
                         </p>
                         
-                        {{-- GRID YA SOCIALS NA REVIEWS (BALANCED KWA SIMU) --}}
                         <div class="grid grid-cols-2 gap-2">
-                            
-                            {{-- OUR SOCIALS --}}
                             <div>
                                 <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
                                     OUR SOCIALS
                                     <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
                                 </h4>
                                 <div class="flex flex-col space-y-3">
-                                    {{-- Hotel IG --}}
                                     <a href="https://www.instagram.com/kigongonigazellahotel?igsh=aTQ4enpzdHJxOXQy" target="_blank" class="flex items-center gap-3 group">
                                         <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
                                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
                                         </div>
                                         <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Hotel IG</span>
                                     </a>
-                                    {{-- Supermarket IG --}}
                                     <a href="https://www.instagram.com/kigongoni_mini_supermarket?igsh=MWJwOW1nODk0YWhybQ==" target="_blank" class="flex items-center gap-3 group">
                                         <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
                                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
@@ -457,28 +502,21 @@
                                 </div>
                             </div>
 
-                            {{-- REVIEW US ON --}}
                             <div class="ml-4 md:ml-8">
                                 <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
                                     REVIEW US ON
                                     <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
                                 </h4>
                                 <div class="flex items-start gap-5">
-                                    {{-- TripAdvisor Link --}}
                                     <a href="https://www.tripadvisor.com/Profile/kigongonigazelahotel" target="_blank" class="flex flex-col items-center gap-2 group" title="Review us on TripAdvisor">
                                         <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#34E0A1]/10 text-[#34E0A1] group-hover:bg-[#34E0A1] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm">
-                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12.016 1.815c5.626 0 10.187 4.561 10.187 10.187S17.642 22.19 12.016 22.19 1.828 17.629 1.828 12.002c0-5.626 4.561-10.187 10.188-10.187zm0 1.572c-4.757 0-8.614 3.857-8.614 8.615s3.857 8.614 8.614 8.614 8.615-3.857 8.615-8.614-3.858-8.615-8.615-8.615zm-4.394 6.702c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm8.788 0c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm-4.394 6.275c-1.336 0-2.418-1.082-2.418-2.418s1.082-2.418 2.418-2.418c1.336 0 2.418 1.082 2.418 2.418s-1.082 2.418-2.418 2.418zm-4.394-5.334c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723zm8.788 0c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723z"/>
-                                            </svg>
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.016 1.815c5.626 0 10.187 4.561 10.187 10.187S17.642 22.19 12.016 22.19 1.828 17.629 1.828 12.002c0-5.626 4.561-10.187 10.188-10.187zm0 1.572c-4.757 0-8.614 3.857-8.614 8.615s3.857 8.614 8.614 8.614 8.615-3.857 8.615-8.614-3.858-8.615-8.615-8.615zm-4.394 6.702c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm8.788 0c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm-4.394 6.275c-1.336 0-2.418-1.082-2.418-2.418s1.082-2.418 2.418-2.418c1.336 0 2.418 1.082 2.418 2.418s-1.082 2.418-2.418 2.418zm-4.394-5.334c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723zm8.788 0c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723z"/></svg>
                                         </div>
                                         <span class="text-[10px] md:text-xs text-gray-400 group-hover:text-white transition-colors text-center">TripAdvisor</span>
                                     </a>
-                                    {{-- Google Review Link --}}
                                     <a href="https://share.google/b5DNapTL0jExr6Tdm" target="_blank" class="flex flex-col items-center gap-2 group" title="Review us on Google">
                                         <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#EA4335]/10 text-[#EA4335] group-hover:bg-[#EA4335] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm">
-                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/>
-                                            </svg>
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
                                         </div>
                                         <span class="text-[10px] md:text-xs text-gray-400 group-hover:text-white transition-colors text-center">Google</span>
                                     </a>
@@ -488,7 +526,6 @@
 
                     </div>
 
-                    {{-- Column 2: Quick Links --}}
                     <div>
                         <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
                             Quick Links
@@ -502,7 +539,6 @@
                         </ul>
                     </div>
 
-                    {{-- Column 3: Our Services --}}
                     <div>
                         <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
                             Our Services
@@ -516,7 +552,6 @@
                         </ul>
                     </div>
 
-                    {{-- Column 4: Contact Us --}}
                     <div>
                         <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
                             Get in Touch
@@ -537,10 +572,8 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
 
-                {{-- SEHEMU YA CHINI --}}
                 <div class="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-400 relative z-10">
                     <div class="flex items-center gap-2">
                         <p>&copy; {{ date('Y') }} Kigongoni Gazella Hotel.</p>
@@ -549,34 +582,73 @@
                     </div>
                     <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-0 md:bg-white/5 md:border md:border-white/10 md:rounded-lg overflow-hidden">
                         <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                            <a href="{{ route('privacy') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">
-                                Privacy Policy
-                            </a>
+                            <a href="{{ route('privacy') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">Privacy Policy</a>
                         </li>
                         <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                            <a href="{{ route('terms') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">
-                                Terms of Service
-                            </a>
+                            <a href="{{ route('terms') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">Terms of Service</a>
                         </li>
                         <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                            <a href="{{ route('faq') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors">
-                                FAQ
-                            </a>
+                            <a href="{{ route('faq') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors">FAQ</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </footer>
-    </div> {{-- MWISHO WA WRAPPER YA KUZUIA HORIZONTAL SCROLL --}}
+    </div>
+
+    {{-- ============================================================
+         HORIZONTAL EXPANDABLE MUSIC WIDGET (CHINI KUSHOTO)
+    ============================================================ --}}
+    <audio id="vibe-audio" loop preload="metadata">
+        <source src="{{ asset('vibe.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <div id="vibe-btn-container" class="fixed bottom-6 left-6 z-[9999]">
+        {{-- Widget Container inayotanuka kwenda kulia --}}
+        <div id="vibe-widget" class="relative w-14 h-14 bg-kigongoniOrange rounded-full shadow-2xl border-2 border-white/20 transition-all duration-300 ease-in-out flex flex-row items-center cursor-pointer overflow-hidden vibe-breathe group">
+            
+            {{-- HALI YA KWANZA (COLLAPSED) --}}
+            <div id="vibe-collapsed" class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 pointer-events-none">
+                <svg class="w-5 h-5 text-white group-hover:scale-110 transition-transform ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5.14v13.72a1 1 0 001.5.86l11.43-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z"/>
+                </svg>
+                <span class="text-white text-[9px] font-bold tracking-widest mt-0.5 hashtag-style">PLAY ME</span>
+            </div>
+
+            {{-- HALI YA PILI (EXPANDED) --}}
+            <div id="vibe-expanded" class="opacity-0 hidden w-full h-full flex flex-row items-center justify-between px-3 transition-opacity duration-300">
+                
+                {{-- Play/Pause Button --}}
+                <button id="vibe-play-pause" class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white transition-colors cursor-pointer">
+                    <svg id="vibe-play-icon" class="hidden w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                    <svg id="vibe-pause-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                </button>
+
+                {{-- Countdown Timer --}}
+                <div id="vibe-timer" class="text-white text-xs font-bold tracking-wider tabular-nums">0:00</div>
+
+                {{-- Waves --}}
+                <div id="vibe-waves" class="wave-container waves-paused">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+
+                {{-- Mshale wa Kufunga/Collapse --}}
+                <button id="vibe-collapse-btn" class="w-8 h-8 flex items-center justify-center text-white/60 hover:text-white shrink-0" title="Minimize">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+            </div>
+            
+        </div>
+    </div>
 
     {{-- FLOATING WHATSAPP BUTTON --}}
     <div class="whatsapp-float-container">
         <div class="whatsapp-button" id="whatsappButton">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
-                <path d="M19.077 4.928C17.191 3.041 14.683 2 12.006 2 6.798 2 2.548 6.193 2.54 11.393c-.003 1.751.456 3.466 1.33 5.004L2.34 21.381c-.103.394.258.75.648.648l4.967-1.478c1.52.83 3.222 1.266 4.973 1.266h.004c5.2 0 9.454-4.195 9.462-9.396.004-2.51-.971-4.868-2.857-6.754l-.009-.008zm-7.071 14.29c-1.438 0-2.846-.385-4.065-1.107l-.292-.173-2.942.875.876-2.868-.191-.301c-.781-1.234-1.193-2.655-1.19-4.111.007-3.649 2.973-6.612 6.628-6.612 1.768 0 3.431.689 4.682 1.94 1.25 1.25 1.939 2.913 1.937 4.682-.005 3.648-2.971 6.615-6.621 6.615h-.002zm3.629-4.953c-.199-.1-1.179-.581-1.361-.647-.182-.066-.315-.1-.448.099-.133.199-.515.647-.632.779-.117.133-.234.149-.433.05-.199-.1-.84-.309-1.599-.986-.589-.525-.987-1.174-1.103-1.372-.117-.199-.013-.306.088-.405.09-.089.199-.233.298-.35.1-.116.133-.199.199-.332.066-.133.033-.249-.017-.348-.05-.1-.448-1.077-.614-1.475-.162-.385-.326-.333-.448-.339-.116-.006-.249-.006-.382-.006s-.35.05-.532.249c-.182.199-.695.679-.695 1.657 0 .978.712 1.923.811 2.056.099.133 1.399 2.133 3.39 2.991 1.99.858 1.99.573 2.349.537.359-.036 1.159-.473 1.322-.93.163-.457.163-.848.114-.93-.049-.082-.182-.133-.382-.232z"/>
-            </svg>
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M19.077 4.928C17.191 3.041 14.683 2 12.006 2 6.798 2 2.548 6.193 2.54 11.393c-.003 1.751.456 3.466 1.33 5.004L2.34 21.381c-.103.394.258.75.648.648l4.967-1.478c1.52.83 3.222 1.266 4.973 1.266h.004c5.2 0 9.454-4.195 9.462-9.396.004-2.51-.971-4.868-2.857-6.754l-.009-.008zm-7.071 14.29c-1.438 0-2.846-.385-4.065-1.107l-.292-.173-2.942.875.876-2.868-.191-.301c-.781-1.234-1.193-2.655-1.19-4.111.007-3.649 2.973-6.612 6.628-6.612 1.768 0 3.431.689 4.682 1.94 1.25 1.25 1.939 2.913 1.937 4.682-.005 3.648-2.971 6.615-6.621 6.615h-.002zm3.629-4.953c-.199-.1-1.179-.581-1.361-.647-.182-.066-.315-.1-.448.099-.133.199-.515.647-.632.779-.117.133-.234.149-.433.05-.199-.1-.84-.309-1.599-.986-.589-.525-.987-1.174-1.103-1.372-.117-.199-.013-.306.088-.405.09-.089.199-.233.298-.35.1-.116.133-.199.199-.332.066-.133.033-.249-.017-.348-.05-.1-.448-1.077-.614-1.475-.162-.385-.326-.333-.448-.339-.116-.006-.249-.006-.382-.006s-.35.05-.532.249c-.182.199-.695.679-.695 1.657 0 .978.712 1.923.811 2.056.099.133 1.399 2.133 3.39 2.991 1.99.858 1.99.573 2.349.537.359-.036 1.159-.473 1.322-.93.163-.457.163-.848.114-.93-.049-.082-.182-.133-.382-.232z"/></svg>
         </div>
-
         <div class="whatsapp-popup" id="whatsappPopup">
             <div class="popup-header">
                 <img src="{{ asset('images/logo.png') }}" alt="Kigongoni Gazella" class="header-logo">
@@ -584,33 +656,17 @@
                 <button class="popup-close" id="closePopup">✕</button>
             </div>
             <div class="popup-body">
-                <div class="online-status">
-                    <span class="online-dot"></span>
-                    <span class="online-text">Typically replies within minutes</span>
-                </div>
+                <div class="online-status"><span class="online-dot"></span><span class="online-text">Typically replies within minutes</span></div>
                 <div class="hotel-message">
-                    <p class="greeting-text">
-                        Greetings from <strong>Kigongoni Gazella Hotel!</strong> 
-                        <span class="wave">👋</span>
-                    </p>
-                    <p class="offer-text">
-                        Welcome! Ready for an unforgettable stay? Enquire today for our best available rates and book your perfect room
-                    </p>
+                    <p class="greeting-text">Greetings from <strong>Kigongoni Gazella Hotel!</strong><span class="wave">👋</span></p>
+                    <p class="offer-text">Welcome! Ready for an unforgettable stay? Enquire today for our best available rates and book your perfect room</p>
                 </div>
-                <a href="https://wa.me/255768219703?text=Hello%20Kigongoni%20Gazella%20Hotel!%20I'm%20interested%20in%20booking%20a%20room.%20Can%20you%20help%20me%20with%20availability%3F" 
-                   target="_blank" 
-                   class="whatsapp-chat-btn">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                        <path d="M19.077 4.928C17.191 3.041 14.683 2 12.006 2 6.798 2 2.548 6.193 2.54 11.393c-.003 1.751.456 3.466 1.33 5.004L2.34 21.381c-.103.394.258.75.648.648l4.967-1.478c1.52.83 3.222 1.266 4.973 1.266h.004c5.2 0 9.454-4.195 9.462-9.396.004-2.51-.971-4.868-2.857-6.754l-.009-.008z"/>
-                    </svg>
+                <a href="https://wa.me/255768219703?text=Hello%20Kigongoni%20Gazella%20Hotel!%20I'm%20interested%20in%20booking%20a%20room.%20Can%20you%20help%20me%20with%20availability%3F" target="_blank" class="whatsapp-chat-btn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.077 4.928C17.191 3.041 14.683 2 12.006 2 6.798 2 2.548 6.193 2.54 11.393c-.003 1.751.456 3.466 1.33 5.004L2.34 21.381c-.103.394.258.75.648.648l4.967-1.478c1.52.83 3.222 1.266 4.973 1.266h.004c5.2 0 9.454-4.195 9.462-9.396.004-2.51-.971-4.868-2.857-6.754l-.009-.008z"/></svg>
                     <span>WhatsApp Us</span>
                 </a>
                 <div class="popup-footer">
-                    <span class="footer-online">
-                        <span class="online-indicator">🟢</span> Online
-                    </span>
-                    <span class="footer-separator">|</span>
-                    <a href="{{ route('privacy') }}" class="privacy-link">Privacy policy</a>
+                    <span class="footer-online"><span class="online-indicator">🟢</span> Online</span><span class="footer-separator">|</span><a href="{{ route('privacy') }}" class="privacy-link">Privacy policy</a>
                 </div>
             </div>
         </div>
@@ -622,6 +678,135 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            // ── JAVASCRIPT YA HORIZONTAL ANIMATED EXPANDABLE MUSIC WIDGET ───
+            const vibeAudio = document.getElementById('vibe-audio');
+            const vibeWidget = document.getElementById('vibe-widget');
+            const vibeCollapsed = document.getElementById('vibe-collapsed');
+            const vibeExpanded = document.getElementById('vibe-expanded');
+            const vibePlayPause = document.getElementById('vibe-play-pause');
+            const vibePlayIcon = document.getElementById('vibe-play-icon');
+            const vibePauseIcon = document.getElementById('vibe-pause-icon');
+            const vibeTimer = document.getElementById('vibe-timer');
+            const vibeCollapseBtn = document.getElementById('vibe-collapse-btn');
+            const vibeWaves = document.getElementById('vibe-waves');
+
+            let isExpanded = false;
+
+            if (vibeAudio && vibeWidget) {
+                vibeAudio.volume = 0.4;
+
+                // 1. CHUKUA MUDA ULIOSIVIWA KUTOKA KWENYE SESSION STORAGE (KAMA UPO)
+                const savedTime = sessionStorage.getItem('vibeCurrentTime');
+                if (savedTime) {
+                    vibeAudio.currentTime = parseFloat(savedTime);
+                }
+
+                function expandWidget() {
+                    isExpanded = true;
+                    vibeWidget.classList.remove('vibe-breathe', 'w-12'); 
+                    vibeWidget.classList.add('w-60'); 
+                    
+                    vibeCollapsed.classList.add('opacity-0');
+                    
+                    setTimeout(() => {
+                        vibeCollapsed.classList.add('hidden');
+                        vibeExpanded.classList.remove('hidden');
+                        setTimeout(() => vibeExpanded.classList.remove('opacity-0'), 20);
+                    }, 200);
+                    
+                    sessionStorage.setItem('vibeExpanded', 'true');
+                }
+
+                function collapseWidget() {
+                    isExpanded = false;
+                    vibeExpanded.classList.add('opacity-0');
+                    
+                    vibeWidget.classList.remove('w-60');
+                    vibeWidget.classList.add('w-12');
+                    
+                    setTimeout(() => {
+                        vibeExpanded.classList.add('hidden');
+                        vibeCollapsed.classList.remove('hidden');
+                        vibeWidget.classList.add('vibe-breathe'); 
+                        setTimeout(() => vibeCollapsed.classList.remove('opacity-0'), 20);
+                    }, 200);
+                    
+                    sessionStorage.setItem('vibeExpanded', 'false');
+                }
+
+                function setPlayingUI() {
+                    vibePlayIcon.classList.add('hidden');
+                    vibePauseIcon.classList.remove('hidden');
+                    vibeWaves.classList.remove('waves-paused');
+                    sessionStorage.setItem('vibePlaying', 'true');
+                }
+
+                function setPausedUI() {
+                    vibePlayIcon.classList.remove('hidden');
+                    vibePauseIcon.classList.add('hidden');
+                    vibeWaves.classList.add('waves-paused');
+                    sessionStorage.setItem('vibePlaying', 'false');
+                }
+
+                if (sessionStorage.getItem('vibeExpanded') === 'true') {
+                    expandWidget();
+                }
+
+                if (sessionStorage.getItem('vibePlaying') === 'true') {
+                    let playPromise = vibeAudio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            setPlayingUI();
+                        }).catch(error => {
+                            setPausedUI();
+                            sessionStorage.setItem('vibePlaying', 'false');
+                        });
+                    }
+                } else {
+                    setPausedUI();
+                }
+
+                vibeWidget.addEventListener('click', (e) => {
+                    if (!isExpanded) {
+                        expandWidget();
+                        if (vibeAudio.paused) {
+                            vibeAudio.play().then(_ => setPlayingUI()).catch(e => setPausedUI());
+                        }
+                    }
+                });
+
+                vibePlayPause.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    if (vibeAudio.paused) {
+                        vibeAudio.play();
+                        setPlayingUI();
+                    } else {
+                        vibeAudio.pause();
+                        setPausedUI();
+                    }
+                });
+
+                vibeCollapseBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    collapseWidget();
+                });
+
+                // 2. HIFADHI MUDA KILA SEKUNDE
+                function updateTimer() {
+                    if (isNaN(vibeAudio.duration)) return;
+                    const remainingTime = Math.floor(vibeAudio.duration - vibeAudio.currentTime);
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    vibeTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                    // Hapa ndipo tunasave muda ili akihama page akute ulipoishia
+                    sessionStorage.setItem('vibeCurrentTime', vibeAudio.currentTime);
+                }
+                
+                vibeAudio.addEventListener('loadedmetadata', updateTimer);
+                vibeAudio.addEventListener('timeupdate', updateTimer);
+            }
 
             // ── SCROLL SPY ──────────────────────────────────────────
             const navLinks = document.querySelectorAll('.nav-link');
@@ -647,19 +832,6 @@
             }
             window.addEventListener('scroll', activeScrollMenu);
             activeScrollMenu();
-
-            // ── FOOTER SPOTLIGHT ────────────────────────────────────
-            const footerArea = document.getElementById('main-footer');
-            const spotlight = document.getElementById('footer-spotlight');
-            if (footerArea && spotlight) {
-                footerArea.addEventListener('mousemove', (e) => {
-                    const rect = footerArea.getBoundingClientRect();
-                    spotlight.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                    spotlight.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-                });
-                footerArea.addEventListener('mouseenter', () => { spotlight.classList.replace('opacity-0', 'opacity-100'); });
-                footerArea.addEventListener('mouseleave', () => { spotlight.classList.replace('opacity-100', 'opacity-0'); });
-            }
 
             // ── WHATSAPP POPUP ───────────────────────────────────────
             const whatsappBtn  = document.getElementById('whatsappButton');

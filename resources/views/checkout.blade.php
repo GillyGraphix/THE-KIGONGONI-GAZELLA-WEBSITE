@@ -2,6 +2,20 @@
 
 @section('content')
 
+@php
+    // Tunadaka taarifa za mlo kutoka kwenye URL
+    $mealPlan = request('meal_plan', 'BB');
+    $mealDays = request('meal_days', 0);
+    
+    // Majina kamili ya Meal Plans
+    $mealPlanNames = [
+        'BB' => __('Bed & Breakfast'),
+        'HB' => __('Half Board'),
+        'FB' => __('Full Board'),
+    ];
+    $displayMealName = $mealPlanNames[$mealPlan] ?? $mealPlan;
+@endphp
+
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
 
@@ -149,9 +163,11 @@
     ];
     $roomRoute  = $roomRoutes[$room_id] ?? 'home';
     $backParams = http_build_query([
-        'checkin'  => request('checkin',  $checkin),
-        'checkout' => request('checkout', $checkout),
-        'guests'   => request('guests',   $guests),
+        'checkin'   => request('checkin',   $checkin),
+        'checkout'  => request('checkout',  $checkout),
+        'guests'    => request('guests',    $guests),
+        'meal_plan' => $mealPlan,
+        'meal_days' => $mealDays,
     ]);
 @endphp
 
@@ -182,7 +198,8 @@
 
             {{-- KUSHOTO: Fomu --}}
             <div class="lg:col-span-8">
-                <form id="booking-form" action="{{ route('booking.submit') }}" method="POST"
+                {{-- Tumeongeza autocomplete="off" kuzuia browser kujaza yenyewe --}}
+                <form id="booking-form" action="{{ route('booking.submit') }}" method="POST" autocomplete="off"
                       class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100 dark:border-gray-700">
                     @csrf
 
@@ -194,12 +211,12 @@
                     <div class="grid md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">{{ __('First Name') }} *</label>
-                            <input type="text" name="first_name" id="first_name" required
+                            <input type="text" name="first_name" id="first_name" autocomplete="off" required
                                    class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-kigongoniOrange outline-none dark:text-white transition shadow-sm">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">{{ __('Last Name') }} *</label>
-                            <input type="text" name="last_name" id="last_name" required
+                            <input type="text" name="last_name" id="last_name" autocomplete="off" required
                                    class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-kigongoniOrange outline-none dark:text-white transition shadow-sm">
                         </div>
                     </div>
@@ -207,7 +224,7 @@
                     <div class="grid md:grid-cols-2 gap-6 mb-8">
                         <div>
                             <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">{{ __('Email Address') }} *</label>
-                            <input type="email" name="email" id="guest_email" required
+                            <input type="email" name="email" id="guest_email" autocomplete="off" required
                                    class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-kigongoniOrange outline-none dark:text-white transition shadow-sm">
                         </div>
                         <div>
@@ -228,7 +245,7 @@
                                 <select id="country-code-select" required></select>
                             </div>
                             <div class="w-2/3 md:w-9/12 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-kigongoniOrange transition overflow-hidden">
-                                <input type="tel" id="phone_raw" pattern="[0-9]*" inputmode="numeric"
+                                <input type="tel" id="phone_raw" pattern="[0-9]*" inputmode="numeric" autocomplete="off"
                                        placeholder="768 219 703" required
                                        class="w-full h-full p-3 bg-transparent outline-none dark:text-white">
                             </div>
@@ -256,6 +273,8 @@
                     <input type="hidden" name="checkin"     value="{{ $checkin }}">
                     <input type="hidden" name="checkout"    value="{{ $checkout }}">
                     <input type="hidden" name="guests"      value="{{ $guests }}">
+                    <input type="hidden" name="meal_plan"   value="{{ $mealPlan }}">
+                    <input type="hidden" name="meal_days"   value="{{ $mealDays }}">
                     <input type="hidden" name="total_price" value="{{ $total_price }}">
 
                     <div class="flex flex-col-reverse sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
@@ -314,12 +333,23 @@
                                 </span>
                                 <span class="text-sm font-black text-kigongoniBlue dark:text-white">{{ __($guests) }}</span>
                             </div>
+                            
+                            {{-- Sehemu ya Mlo iliyoboreshwa kuendana na Plan na Days na SVG mpya --}}
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-gray-600 dark:text-gray-400 font-bold flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                                    {{ __('Breakfast') }}
+                                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v4m-4-4v4m8-4v4M3 14c0 3.314 3.582 6 8 6h2c4.418 0 8-2.686 8-6H3z"/>
+                                    </svg>
+                                    {{ __('Meal Plan') }}
                                 </span>
-                                <span class="text-[10px] font-black uppercase tracking-wider text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">{{ __('Included') }}</span>
+                                <div class="text-right">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
+                                        {{ $displayMealName }}
+                                    </span>
+                                    @if($mealPlan != 'BB' && $mealDays > 0)
+                                        <p class="text-[9px] text-gray-400 font-bold mt-1 uppercase tracking-wider">{{ $mealDays }} {{ $mealDays > 1 ? __('Days') : __('Day') }}</p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="flex justify-between items-end">

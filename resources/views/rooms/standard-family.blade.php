@@ -7,6 +7,8 @@
     $checkin  = request('checkin', '');
     $checkout = request('checkout', '');
     $guests   = request('guests', 'Family (4+)');
+    $mealPlan = request('meal_plan', 'BB');
+    $mealDays = request('meal_days', 0);
 
     $checkinFormatted  = $checkin  ? \Carbon\Carbon::parse($checkin)->format('D, d M Y')  : null;
     $checkoutFormatted = $checkout ? \Carbon\Carbon::parse($checkout)->format('D, d M Y') : null;
@@ -22,6 +24,8 @@
         'guests'     => $guests,
         'room_type'  => 'Standard Family Room',
         'room_price' => 100,
+        'meal_plan'  => $mealPlan,
+        'meal_days'  => $mealDays,
     ]);
 @endphp
 
@@ -90,7 +94,7 @@
         @endif
 
         {{-- ── INLINE CHANGE-DATES CALENDAR ────────────────────── --}}
-        <div id="inline-cal-panel" class="hidden mb-8">
+        <div id="inline-cal-panel" class="hidden mb-8 overflow-hidden" style="transition: all 0.3s ease;">
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-kigongoniOrange/30 dark:border-kigongoniOrange/40 overflow-hidden">
                 <div class="bg-kigongoniBlue px-6 py-4 flex items-center justify-between">
                     <div>
@@ -115,25 +119,25 @@
                             </div>
                             <div class="grid grid-cols-7 mb-1">
                                 @foreach(['Su','Mo','Tu','We','Th','Fr','Sa'] as $d)
-                                <div class="text-center text-[9px] font-black text-gray-400 uppercase py-1">{{ __($d) }}</div>
+                                <div class="text-center text-[9px] font-black text-gray-400 uppercase py-1">{{ $d }}</div>
                                 @endforeach
                             </div>
                             <div id="inline-cal-grid" class="grid grid-cols-7 gap-1"></div>
                             <div class="flex gap-4 mt-3 px-1">
-                                <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $100</div>
-                                <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $140</div>
-                                <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange inline-block"></span> {{ __('Selected') }}</div>
+                                <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500">
+                                    <span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $100+
+                                </div>
+                                <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500">
+                                    <span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $140+
+                                </div>
+                                <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500">
+                                    <span class="w-3 h-3 rounded-sm bg-kigongoniOrange inline-block"></span> {{ __('Selected') }}
+                                </div>
                             </div>
                         </div>
                         <div class="flex flex-col gap-4">
-                            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 space-y-3 border border-gray-100 dark:border-gray-700">
-                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Check-In') }}</span><span id="inline-checkin-display" class="text-sm font-black text-kigongoniBlue dark:text-white">— {{ __('Select date') }}</span></div>
-                                <div class="w-full h-px bg-gray-100 dark:bg-gray-600"></div>
-                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Check-Out') }}</span><span id="inline-checkout-display" class="text-sm font-black text-kigongoniBlue dark:text-white">— {{ __('Select date') }}</span></div>
-                                <div class="w-full h-px bg-gray-100 dark:bg-gray-600"></div>
-                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Nights') }}</span><span id="inline-nights-display" class="text-sm font-black text-kigongoniOrange">—</span></div>
-                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Total') }}</span><span id="inline-total-display" class="text-lg font-black text-kigongoniOrange">—</span></div>
-                            </div>
+                            
+                            {{-- Guests --}}
                             <div>
                                 <label class="block text-xs font-bold text-kigongoniBlue dark:text-gray-400 uppercase mb-2 tracking-wider">{{ __('Guests') }}</label>
                                 <select id="inline-guests" class="w-full border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-xl p-3 focus:ring-2 focus:ring-kigongoniOrange focus:outline-none transition text-sm cursor-pointer font-bold">
@@ -143,7 +147,59 @@
                                     <option value="Family (4+)" selected>{{ __('Family (4+)') }}</option>
                                 </select>
                             </div>
-                            <p id="inline-mode-label" class="text-center text-xs font-black text-kigongoniOrange uppercase tracking-widest bg-kigongoniOrange/8 rounded-lg py-2">{{ __('Select your check-in date') }}</p>
+
+                            {{-- Meal Plan Component (Inline) --}}
+                            <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+                                <label class="block text-xs font-bold text-kigongoniBlue dark:text-gray-400 uppercase mb-2 tracking-wider">{{ __('Meal Plan') }}</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="meal_inline" value="BB" class="peer sr-only" onchange="updateMealPlan('BB')">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                            <span class="block text-[11px] font-black uppercase">BB</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="meal_inline" value="HB" class="peer sr-only" onchange="updateMealPlan('HB')">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                            <span class="block text-[11px] font-black uppercase">HB</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="meal_inline" value="FB" class="peer sr-only" onchange="updateMealPlan('FB')">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                            <span class="block text-[11px] font-black uppercase">FB</span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div id="meal-days-wrap-inline" class="hidden mt-2">
+                                    <div class="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg border border-gray-100 dark:border-gray-600">
+                                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{{ __('For how many days?') }}</span>
+                                        <select id="meal-days-inline" onchange="updateMealDays(this.value)" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs font-bold p-1 focus:outline-none">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="inline-summary" class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 space-y-3 border border-gray-100 dark:border-gray-700">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Check-In') }}</span>
+                                    <span id="inline-checkin-display" class="text-sm font-black text-kigongoniBlue dark:text-white">{{ __('— Select date') }}</span>
+                                </div>
+                                <div class="w-full h-px bg-gray-100 dark:bg-gray-600"></div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Check-Out') }}</span>
+                                    <span id="inline-checkout-display" class="text-sm font-black text-kigongoniBlue dark:text-white">{{ __('— Select date') }}</span>
+                                </div>
+                                <div class="w-full h-px bg-gray-100 dark:bg-gray-600"></div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Nights') }}</span>
+                                    <span id="inline-nights-display" class="text-sm font-black text-kigongoniOrange">—</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Total') }}</span>
+                                    <span id="inline-total-display" class="text-lg font-black text-kigongoniOrange">—</span>
+                                </div>
+                            </div>
                             <button type="button" id="inline-confirm-btn"
                                 class="w-full flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-4 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-sm shadow-lg opacity-50 cursor-not-allowed"
                                 disabled>
@@ -173,17 +229,17 @@
             <div class="relative z-10 p-8 md:p-10">
                 <div class="flex flex-col lg:flex-row lg:items-stretch gap-6">
 
-                    {{-- LEFT --}}
+                    {{-- LEFT: Title + Amenities --}}
                     <div class="flex-1 rounded-2xl p-6 flex flex-col justify-between gap-6"
                          style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
                         <div>
                             <div class="flex items-center gap-3 mb-3">
                                 <div class="h-px w-8 bg-kigongoniOrange"></div>
-                                <span class="text-kigongoniOrange text-xs font-black uppercase tracking-[0.3em]">{{ __('Accommodation') }} </span>
+                                <span class="text-kigongoniOrange text-xs font-black uppercase tracking-[0.3em]">{{ __('Accommodation') }}</span>
                             </div>
                             <h1 class="text-5xl md:text-6xl font-black text-white uppercase tracking-tight leading-none mb-5">
-                                {{ __('Standard') }}<br>
-                                <span class="text-kigongoniOrange" style="text-shadow: 0 0 40px rgba(239,74,37,0.5);">{{ __('Family Room') }}</span>
+                                Standard<br>
+                                <span class="text-kigongoniOrange" style="text-shadow: 0 0 40px rgba(239,74,37,0.5);">Family Room</span>
                             </h1>
                             <div class="flex flex-wrap gap-2 mb-5">
                                 <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-green-400/40 text-green-300" style="background: rgba(74,222,128,0.12); backdrop-filter: blur(8px);">
@@ -235,7 +291,7 @@
                                     <span class="text-kigongoniOrange text-xl font-black mt-1.5">$</span>
                                     <span id="price-display" class="text-white font-black leading-none drop-shadow-lg" style="font-size:64px;line-height:1;">100</span>
                                 </div>
-                                <p class="text-white/40 text-[10px] uppercase tracking-widest font-bold mt-0.5">{{ __('Per Night · Incl. Breakfast') }}</p>
+                                <p class="text-white/40 text-[10px] uppercase tracking-widest font-bold mt-0.5">{{ __('Per Night · Incl. B&B') }}</p>
                             </div>
                             <div class="w-16 h-16 rounded-2xl flex flex-col items-center justify-center flex-shrink-0"
                                  style="background: rgba(239,74,37,0.2); border: 1px solid rgba(239,74,37,0.4); backdrop-filter: blur(8px);">
@@ -247,26 +303,26 @@
                             <div class="rounded-xl p-3" style="background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); backdrop-filter: blur(8px);">
                                 <div class="flex items-center gap-1.5 mb-1.5"><div class="w-2 h-2 rounded-full bg-blue-400"></div><p class="text-blue-300 text-[10px] font-black uppercase tracking-wide">{{ __('Low Season') }}</p></div>
                                 <p class="text-white font-black text-xl leading-none">$100</p>
-                                <p class="text-white/30 text-[9px] font-bold mt-0.5">{{ __('Jan 1 — Apr 30') }}</p>
+                                <p class="text-white/30 text-[8.5px] font-bold mt-0.5 leading-tight">Jan 15-31, Mar, Apr, May, Sep, Oct, Nov</p>
                             </div>
                             <div class="rounded-xl p-3" style="background: rgba(239,74,37,0.15); border: 1px solid rgba(239,74,37,0.4); backdrop-filter: blur(8px);">
                                 <div class="flex items-center gap-1.5 mb-1.5"><div class="w-2 h-2 rounded-full bg-kigongoniOrange"></div><p class="text-kigongoniOrange text-[10px] font-black uppercase tracking-wide">{{ __('High Season') }}</p></div>
                                 <p class="text-kigongoniOrange font-black text-xl leading-none">$140</p>
-                                <p class="text-white/30 text-[9px] font-bold mt-0.5">{{ __('May 1 — Dec 31') }}</p>
+                                <p class="text-white/30 text-[8.5px] font-bold mt-0.5 leading-tight">Jun, Jul, Aug, Dec 15-Jan 14, Feb</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div class="flex items-center gap-2 rounded-lg px-3 py-2" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-white/70 text-[10px] font-bold uppercase leading-tight">{{ __('Free Cancel') }}</span></div>
-                            <div class="flex items-center gap-2 rounded-lg px-3 py-2" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);"><svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span class="text-white/70 text-[10px] font-bold uppercase leading-tight">{{ __('Breakfast Incl.') }}</span></div>
+                            <div class="flex items-center gap-2 rounded-lg px-3 py-2" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);"><svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg><span class="text-white/70 text-[10px] font-bold uppercase leading-tight">{{ __('Meal Upgrades') }}</span></div>
                             <div class="flex items-center gap-2 rounded-lg px-3 py-2" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);"><svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="text-white/70 text-[10px] font-bold uppercase leading-tight">{{ __('24/7 Support') }}</span></div>
-                            <div class="flex items-center gap-2 rounded-lg px-3 py-2" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);"><svg class="w-4 h-4 text-orange-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg><span class="text-white/70 text-[10px] font-bold uppercase leading-tight">{{ __('Mto wa Mbu') }}</span></div>
+                            <div class="flex items-center gap-2 rounded-lg px-3 py-2" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);"><svg class="w-4 h-4 text-orange-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg><span class="text-white/70 text-[10px] font-bold uppercase leading-tight">Mto wa Mbu</span></div>
                         </div>
                         <div class="flex flex-col gap-2 mt-auto">
                             @if($checkinFormatted && $checkoutFormatted)
-                                <a href="{{ route('booking.checkout', 3) }}?{{ $bookingParams }}"
+                                <a href="#booking-calendar"
                                    class="flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-3.5 rounded-xl hover:bg-white hover:text-kigongoniOrange transition duration-300 uppercase tracking-widest text-xs shadow-xl border-2 border-transparent hover:border-kigongoniOrange w-full">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                    {{ __('Book Now') }} — {{ $nights }} {{ $nights > 1 ? __('Nights') : __('Night') }}
+                                    {{ __('Checkout Below') }} — {{ $nights }} {{ $nights > 1 ? __('Nights') : __('Night') }}
                                 </a>
                             @else
                                 <a href="#booking-calendar"
@@ -282,7 +338,7 @@
                                 {{ __('WhatsApp Us') }}
                             </a>
                         </div>
-                        <p id="season-note" class="text-center text-white/30 text-[10px] font-black uppercase tracking-widest"></p>
+                        <p id="season-note" class="text-center text-white/30 text-[10px] font-black uppercase tracking-widest" data-low-text="{{ __('Low Season') }} — Jan 15-31, Mar, Apr, May, Sep, Oct, Nov" data-high-text="{{ __('High Season') }} — Jun, Jul, Aug, Dec 15-Jan 14, Feb"></p>
                     </div>
                 </div>
             </div>
@@ -290,37 +346,44 @@
 
         {{-- ============ ABOUT THIS ROOM ============ --}}
         <div class="mb-10" data-aos="fade-up">
-            <div class="flex items-center gap-3 mb-4"><div class="w-8 h-1 bg-kigongoniOrange rounded-full"></div><h2 class="text-xl font-black text-kigongoniBlue dark:text-white uppercase tracking-wide">{{ __('About This Room') }}</h2></div>
-            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base">{{ __('The Standard Family Room at Kigongoni Gazella Hotel is our most spacious standard offering — a warm, generously sized retreat designed for families of up to four guests. Featuring two comfortable double beds, this room gives every family member their own space to relax after an unforgettable day on safari.') }}</p>
-            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base mt-4">{{ __('At approximately 45 m², there is plenty of room for everyone to unwind, unpack, and feel truly at home. Whether you are exploring the Serengeti, Lake Manyara, or the Ngorongoro Crater, this family room is your perfect Tanzanian home away from home — comfortable, welcoming, and full of warmth.') }}</p>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-1 bg-kigongoniOrange rounded-full"></div>
+                <h2 class="text-xl font-black text-kigongoniBlue dark:text-white uppercase tracking-wide">{{ __('About This Room') }}</h2>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base">
+                {{ __('The Standard Family Room at Kigongoni Gazella Hotel is our most spacious standard offering — a warm, generously sized retreat designed for families of up to four guests. Featuring two comfortable double beds, this room gives every family member their own space to relax after an unforgettable day on safari.') }}
+            </p>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base mt-4">
+                {{ __('At approximately 45 m², there is plenty of room for everyone to unwind, unpack, and feel truly at home. Whether you are exploring the Serengeti, Lake Manyara, or the Ngorongoro Crater, this family room is your perfect Tanzanian home away from home — comfortable, welcoming, and full of warmth.') }}
+            </p>
         </div>
 
         {{-- ============ GALLERY ============ --}}
         <div class="grid grid-cols-4 grid-rows-2 gap-3 h-[420px] md:h-[500px] mb-12 rounded-2xl overflow-hidden" data-aos="fade-up">
             <div class="col-span-4 md:col-span-2 md:row-span-2 relative overflow-hidden group cursor-pointer" onclick="openLightbox(0)">
-                <img src="{{ asset('images/rooms/standard-family/main.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1000&q=80'" alt="{{ __('Main View') }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                <img src="{{ asset('images/rooms/standard-family/main.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1000&q=80'" alt="Main View" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition duration-300 flex items-center justify-center"><svg class="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition duration-300 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg></div>
                 <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">{{ __('Main View') }}</div>
             </div>
             <div class="col-span-2 md:col-span-1 relative overflow-hidden group cursor-pointer" onclick="openLightbox(1)">
-                <img src="{{ asset('images/rooms/standard-family/bathroom.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=600&q=80'" alt="{{ __('Bathroom') }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <img src="{{ asset('images/rooms/standard-family/bathroom.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=600&q=80'" alt="Bathroom" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition duration-300"></div>
                 <div class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">{{ __('Bathroom') }}</div>
             </div>
             <div class="col-span-2 md:col-span-1 relative overflow-hidden group cursor-pointer" onclick="openLightbox(2)">
-                <img src="{{ asset('images/rooms/standard-family/desk.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=600&q=80'" alt="{{ __('Desk Area') }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <img src="{{ asset('images/rooms/standard-family/desk.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=600&q=80'" alt="Desk Area" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition duration-300"></div>
                 <div class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">{{ __('Desk Area') }}</div>
             </div>
             <div class="col-span-2 md:col-span-1 relative overflow-hidden group cursor-pointer" onclick="openLightbox(3)">
-                <img src="{{ asset('images/rooms/standard-family/view.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80'" alt="{{ __('Room View') }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <img src="{{ asset('images/rooms/standard-family/view.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80'" alt="Room View" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition duration-300"></div>
                 <div class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">{{ __('Room View') }}</div>
             </div>
             <div class="col-span-2 md:col-span-1 relative overflow-hidden group cursor-pointer" onclick="openLightbox(4)">
-                <img src="{{ asset('images/rooms/standard-family/window.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1595599872002-9154efcf5b8e?auto=format&fit=crop&w=600&q=80'" alt="{{ __('Window') }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <img src="{{ asset('images/rooms/standard-family/window.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1595599872002-9154efcf5b8e?auto=format&fit=crop&w=600&q=80'" alt="Window Side" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition duration-300 flex items-center justify-center"><span class="text-white text-sm font-black opacity-0 group-hover:opacity-100 uppercase tracking-widest drop-shadow-lg">{{ __('See All') }}</span></div>
-                <div class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">{{ __('Window') }}</div>
+                <div class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">{{ __('Window Side') }}</div>
             </div>
         </div>
 
@@ -344,7 +407,7 @@
                             ['Electric Kettle','M4 19h16M7 19v-2a4 4 0 014-4h2a4 4 0 014 4v2M9 11V7m4 4V5m4 6V8'],
                             ['Laundry (Extra Fee)','M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'],
                             ['Extension Cable','M9 3v4m6-4v4M7 7h10v3a5 5 0 01-10 0V7z m5 5v9'],
-                            ['2 Double Beds','M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
+                            ['2 Double Beds','M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 001 1m-6 0h6'],
                         ] as [$name, $path])
                         <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-kigongoniOrange transition duration-300 group">
                             <div class="w-10 h-10 rounded-full bg-kigongoniOrange/10 flex items-center justify-center flex-shrink-0 group-hover:bg-kigongoniOrange/20 transition">
@@ -390,7 +453,7 @@
                 <div id="booking-calendar" class="sticky top-28 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden" data-aos="fade-left">
                     <div class="bg-kigongoniBlue dark:bg-gray-900 p-5 text-white">
                         <p class="text-xs font-black uppercase tracking-[0.3em] text-kigongoniOrange mb-1">{{ __('Book This Room') }}</p>
-                        <h3 class="text-xl font-black uppercase">{{ __('Standard Family') }}</h3>
+                        <h3 class="text-xl font-black uppercase">{{ __('Standard Family Room') }}</h3>
                     </div>
                     <div class="p-4">
                         @if($checkinFormatted && $checkoutFormatted)
@@ -398,13 +461,50 @@
                             <div class="flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Check-In') }}</span><span class="text-xs font-black text-kigongoniBlue dark:text-white">{{ $checkinFormatted }}</span></div>
                             <div class="flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Check-Out') }}</span><span class="text-xs font-black text-kigongoniBlue dark:text-white">{{ $checkoutFormatted }}</span></div>
                             <div class="flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Guests') }}</span><span class="text-xs font-black text-kigongoniBlue dark:text-white">{{ __($guests) }}</span></div>
-                            <div class="border-t border-kigongoniBlue/10 dark:border-kigongoniBlue/30 pt-2.5 flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Nights') }}</span><span class="text-sm font-black text-kigongoniOrange">{{ $nights }} {{ $nights > 1 ? __('nights') : __('night') }}</span></div>
+                            <div class="border-t border-kigongoniBlue/10 dark:border-kigongoniBlue/30 pt-2.5 flex justify-between items-center"><span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Nights') }}</span><span class="text-sm font-black text-kigongoniOrange">{{ $nights }} {{ $nights > 1 ? __('Nights') : __('Night') }}</span></div>
                         </div>
-                        <a href="{{ route('booking.checkout', 3) }}?{{ $bookingParams }}"
-                           class="w-full flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-3.5 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-xs shadow-lg mb-4">
+
+                        {{-- Meal Plan Component (Desktop Selected) --}}
+                        <div class="mb-4 border-t border-gray-100 dark:border-gray-700 pt-3">
+                            <label class="block text-xs font-bold text-kigongoniBlue dark:text-gray-400 uppercase mb-2 tracking-wider">{{ __('Meal Plan') }}</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="meal_desk" value="BB" class="peer sr-only" onchange="updateMealPlan('BB')">
+                                    <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                        <span class="block text-[11px] font-black uppercase">BB</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="meal_desk" value="HB" class="peer sr-only" onchange="updateMealPlan('HB')">
+                                    <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                        <span class="block text-[11px] font-black uppercase">HB</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="meal_desk" value="FB" class="peer sr-only" onchange="updateMealPlan('FB')">
+                                    <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                        <span class="block text-[11px] font-black uppercase">FB</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <div id="meal-days-wrap-desk" class="hidden mt-2">
+                                <div class="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg border border-gray-100 dark:border-gray-600">
+                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{{ __('For how many days?') }}</span>
+                                    <select id="meal-days-desk" onchange="updateMealDays(this.value)" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs font-bold p-1 focus:outline-none">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-4 px-1">
+                            <span class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Total Price') }}</span>
+                            <span id="summary-total-desk-pre" class="text-xl font-black text-kigongoniOrange">—</span>
+                        </div>
+
+                        <button type="button" id="cal-book-btn-pre" class="w-full flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-3.5 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-xs shadow-lg mb-3">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             {{ __('Confirm Booking') }}
-                        </a>
+                        </button>
                         @else
                         <div class="flex items-center justify-between mb-3">
                             <button id="cal-prev" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition text-gray-600 dark:text-gray-300"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
@@ -413,15 +513,16 @@
                         </div>
                         <div class="grid grid-cols-7 mb-1">
                             @foreach(['Su','Mo','Tu','We','Th','Fr','Sa'] as $d)
-                            <div class="text-center text-[9px] font-black text-gray-400 uppercase py-1">{{ __($d) }}</div>
+                            <div class="text-center text-[9px] font-black text-gray-400 uppercase py-1">{{ $d }}</div>
                             @endforeach
                         </div>
                         <div id="cal-grid" class="grid grid-cols-7 gap-0.5"></div>
                         <div class="flex gap-3 my-3 px-1">
-                            <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $100</div>
-                            <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $140</div>
+                            <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $100+</div>
+                            <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $140+</div>
                             <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange inline-block"></span> {{ __('Selected') }}</div>
                         </div>
+
                         <div id="date-summary" class="hidden bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 mb-3 text-xs">
                             <div class="flex justify-between mb-1"><span class="text-gray-500 dark:text-gray-400 font-semibold">{{ __('Check-In') }}</span><span id="summary-checkin" class="font-black text-kigongoniBlue dark:text-white">—</span></div>
                             <div class="flex justify-between mb-1"><span class="text-gray-500 dark:text-gray-400 font-semibold">{{ __('Check-Out') }}</span><span id="summary-checkout" class="font-black text-kigongoniBlue dark:text-white">—</span></div>
@@ -436,6 +537,39 @@
                                 <option value="Family (4+)" selected>{{ __('Family (4+)') }}</option>
                             </select>
                         </div>
+
+                        {{-- Meal Plan Component (Desktop Calendar) --}}
+                        <div class="mb-4 border-t border-gray-100 dark:border-gray-700 pt-3">
+                            <label class="block text-xs font-bold text-kigongoniBlue dark:text-gray-400 uppercase mb-2 tracking-wider">{{ __('Meal Plan') }}</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="meal_desk" value="BB" class="peer sr-only" onchange="updateMealPlan('BB')">
+                                    <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                        <span class="block text-[11px] font-black uppercase">BB</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="meal_desk" value="HB" class="peer sr-only" onchange="updateMealPlan('HB')">
+                                    <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                        <span class="block text-[11px] font-black uppercase">HB</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="meal_desk" value="FB" class="peer sr-only" onchange="updateMealPlan('FB')">
+                                    <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                        <span class="block text-[11px] font-black uppercase">FB</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <div id="meal-days-wrap-desk" class="hidden mt-2">
+                                <div class="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg border border-gray-100 dark:border-gray-600">
+                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{{ __('For how many days?') }}</span>
+                                    <select id="meal-days-desk" onchange="updateMealDays(this.value)" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs font-bold p-1 focus:outline-none">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <button id="cal-book-btn" class="w-full bg-kigongoniOrange text-white font-black py-3.5 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-xs shadow-lg mb-3">{{ __('Check Availability') }}</button>
                         @endif
                         <div class="text-center">
@@ -460,14 +594,51 @@
                         <div class="flex justify-between items-center"><span class="text-sm font-bold text-gray-500 dark:text-gray-400">{{ __('Check-In') }}</span><span class="text-sm font-black text-kigongoniBlue dark:text-white">{{ $checkinFormatted }}</span></div>
                         <div class="flex justify-between items-center"><span class="text-sm font-bold text-gray-500 dark:text-gray-400">{{ __('Check-Out') }}</span><span class="text-sm font-black text-kigongoniBlue dark:text-white">{{ $checkoutFormatted }}</span></div>
                         <div class="flex justify-between items-center"><span class="text-sm font-bold text-gray-500 dark:text-gray-400">{{ __('Guests') }}</span><span class="text-sm font-black text-kigongoniBlue dark:text-white">{{ __($guests) }}</span></div>
-                        <div class="border-t border-kigongoniBlue/10 dark:border-kigongoniBlue/30 pt-2.5 flex justify-between items-center"><span class="text-sm font-bold text-gray-500 dark:text-gray-400">{{ __('Nights') }}</span><span class="text-base font-black text-kigongoniOrange">{{ $nights }} {{ $nights > 1 ? __('nights') : __('night') }}</span></div>
+                        <div class="border-t border-kigongoniBlue/10 dark:border-kigongoniBlue/30 pt-2.5 flex justify-between items-center"><span class="text-sm font-bold text-gray-500 dark:text-gray-400">{{ __('Nights') }}</span><span class="text-base font-black text-kigongoniOrange">{{ $nights }} {{ $nights > 1 ? __('Nights') : __('Night') }}</span></div>
                     </div>
+
+                    {{-- Meal Plan Component (Mobile Selected) --}}
+                    <div class="mb-4 border-t border-gray-100 dark:border-gray-700 pt-3">
+                        <label class="block text-xs font-bold text-kigongoniBlue dark:text-gray-400 uppercase mb-2 tracking-wider">{{ __('Meal Plan') }}</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="meal_mob" value="BB" class="peer sr-only" onchange="updateMealPlan('BB')">
+                                <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                    <span class="block text-[11px] font-black uppercase">BB</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="meal_mob" value="HB" class="peer sr-only" onchange="updateMealPlan('HB')">
+                                <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                    <span class="block text-[11px] font-black uppercase">HB</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="meal_mob" value="FB" class="peer sr-only" onchange="updateMealPlan('FB')">
+                                <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                    <span class="block text-[11px] font-black uppercase">FB</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="meal-days-wrap-mob" class="hidden mt-2">
+                            <div class="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg border border-gray-100 dark:border-gray-600">
+                                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{{ __('For how many days?') }}</span>
+                                <select id="meal-days-mob" onchange="updateMealDays(this.value)" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs font-bold p-1 focus:outline-none">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-4 px-1">
+                        <span class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Total Price') }}</span>
+                        <span id="summary-total-mob-pre" class="text-xl font-black text-kigongoniOrange">—</span>
+                    </div>
+
                     <div class="flex flex-col gap-3">
-                        <a href="{{ route('booking.checkout', 3) }}?{{ $bookingParams }}"
-                           class="w-full flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-4 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-sm shadow-lg">
+                        <button type="button" id="cal-book-btn-mob-pre" class="w-full flex items-center justify-center gap-2 bg-kigongoniOrange text-white font-black py-4 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-sm shadow-lg">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             {{ __('Confirm Booking') }}
-                        </a>
+                        </button>
                     </div>
                     @else
                     <div class="flex items-center justify-between mb-3">
@@ -477,13 +648,13 @@
                     </div>
                     <div class="grid grid-cols-7 mb-1">
                         @foreach(['Su','Mo','Tu','We','Th','Fr','Sa'] as $day)
-                        <div class="text-center text-[10px] font-black text-gray-400 uppercase py-1">{{ __($day) }}</div>
+                        <div class="text-center text-[10px] font-black text-gray-400 uppercase py-1">{{ $day }}</div>
                         @endforeach
                     </div>
                     <div id="cal-grid-mob" class="grid grid-cols-7 gap-1 mb-4"></div>
                     <div class="flex flex-wrap gap-4 mb-4 px-1">
-                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $100</div>
-                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $140</div>
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $100+</div>
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $140+</div>
                         <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange inline-block"></span> {{ __('Selected') }}</div>
                     </div>
                     <div id="date-summary-mob" class="hidden bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-4 text-sm">
@@ -500,10 +671,43 @@
                             <option value="Family (4+)" selected>{{ __('Family (4+)') }}</option>
                         </select>
                     </div>
+
+                    {{-- Meal Plan Component (Mobile Calendar) --}}
+                    <div class="mb-4 border-t border-gray-100 dark:border-gray-700 pt-3">
+                        <label class="block text-xs font-bold text-kigongoniBlue dark:text-gray-400 uppercase mb-2 tracking-wider">{{ __('Meal Plan') }}</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="meal_mob" value="BB" class="peer sr-only" onchange="updateMealPlan('BB')">
+                                <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                    <span class="block text-[11px] font-black uppercase">BB</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="meal_mob" value="HB" class="peer sr-only" onchange="updateMealPlan('HB')">
+                                <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                    <span class="block text-[11px] font-black uppercase">HB</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="meal_mob" value="FB" class="peer sr-only" onchange="updateMealPlan('FB')">
+                                <div class="text-center py-2 px-1 rounded-lg border border-gray-200 dark:border-gray-600 peer-checked:bg-kigongoniOrange/10 peer-checked:border-kigongoniOrange peer-checked:text-kigongoniOrange transition">
+                                    <span class="block text-[11px] font-black uppercase">FB</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="meal-days-wrap-mob" class="hidden mt-2">
+                            <div class="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg border border-gray-100 dark:border-gray-600">
+                                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{{ __('For how many days?') }}</span>
+                                <select id="meal-days-mob" onchange="updateMealDays(this.value)" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-xs font-bold p-1 focus:outline-none">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex flex-col gap-3">
                         <button id="cal-book-btn-mob" class="w-full bg-kigongoniOrange text-white font-black py-4 rounded-xl hover:bg-kigongoniBlue transition duration-300 uppercase tracking-widest text-sm shadow-lg">{{ __('Check Availability') }}</button>
                         <a href="https://wa.me/255768219703?text={{ urlencode(__('Hello, I would like to book the Standard Family room')) }}" target="_blank"
-                           class="w-full flex items-center justify-center gap-2 bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-400 font-black py-3.5 rounded-xl hover:bg-green-500/20 transition duration-300 uppercase tracking-widest text-sm">
+                            class="w-full flex items-center justify-center gap-2 bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-400 font-black py-3.5 rounded-xl hover:bg-green-500/20 transition duration-300 uppercase tracking-widest text-sm">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.507 3.933 1.395 5.61L.057 23.882l6.396-1.315A11.949 11.949 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.784 9.784 0 01-5.031-1.388l-.361-.214-3.735.768.793-3.635-.235-.374A9.773 9.773 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
                             {{ __('WhatsApp Us') }}
                         </a>
@@ -542,37 +746,133 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-const checkoutRoute = "{{ route('booking.checkout', 3) }}";
+const checkoutRoute = "{{ route('booking.checkout', 3) }}"; // Route ID 3 kwa Family Room
 
-// ─── Season Pricing ──────────────────────────────────────────
-const PRICES = { low: 100, high: 140 };
+// ─── Season & Meal Pricing ────────────────────────────────────
+// HB Add-on for family: $60, FB Add-on: $120. (Added on top of BB price)
+const PRICES = {
+    low:  { BB: 100, HB: 120, FB: 140 },
+    high: { BB: 140, HB: 150, FB: 160 }
+};
 
-function getDayPrice(date) {
-    const m = date.getMonth() + 1;
-    return (m >= 1 && m <= 4) ? PRICES.low : PRICES.high;
+let currentMealPlan = "{{ $mealPlan }}";
+let currentMealDays = parseInt("{{ $mealDays }}") || 0;
+
+function initMealUI() {
+    updateMealPlan(currentMealPlan, true);
 }
+
+function updateMealPlan(plan, isInit = false) {
+    currentMealPlan = plan;
+    document.querySelectorAll('input[type="radio"][value="'+plan+'"]').forEach(r => r.checked = true);
+    
+    document.querySelectorAll('[id^="meal-days-wrap-"]').forEach(w => {
+        if(plan === 'BB') w.classList.add('hidden');
+        else w.classList.remove('hidden');
+    });
+
+    if(!isInit) {
+        updateAllSummaries();
+    }
+}
+
+function updateMealDays(days) {
+    currentMealDays = parseInt(days);
+    document.querySelectorAll('[id^="meal-days-"]').forEach(s => s.value = days);
+    updateAllSummaries();
+}
+
+function populateMealDaysSelects(nights) {
+    const defaultDays = (currentMealDays > 0 && currentMealDays <= nights) ? currentMealDays : nights;
+    currentMealDays = defaultDays;
+
+    ['meal-days-desk', 'meal-days-mob', 'meal-days-inline'].forEach(id => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        select.innerHTML = '';
+        for (let i = 1; i <= nights; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i + (i === 1 ? ' Day' : ' Days');
+            select.appendChild(opt);
+        }
+        select.value = currentMealDays;
+    });
+}
+
 function isLowSeason(date) {
     const m = date.getMonth() + 1;
-    return m >= 1 && m <= 4;
+    const d = date.getDate();
+
+    if (m === 6 || m === 7 || m === 8 || m === 2) return false;
+    if (m === 12 && d >= 15) return false;
+    if (m === 1 && d <= 14) return false;
+    return true; 
+}
+
+function getDayPrice(date, plan = 'BB', isMealDay = true) {
+    const season = isLowSeason(date) ? 'low' : 'high';
+    const activePlan = isMealDay ? plan : 'BB';
+    return PRICES[season][activePlan];
 }
 
 (function() {
     const today = new Date();
     const low = isLowSeason(today);
     const priceEl = document.getElementById('price-display');
-    if (priceEl) priceEl.textContent = low ? PRICES.low : PRICES.high;
+    if (priceEl) priceEl.textContent = low ? PRICES.low.BB : PRICES.high.BB;
     const noteEl = document.getElementById('season-note');
-    if (noteEl) noteEl.textContent = low
-        ? "🟦 {{ __('Low Season — Jan · Feb · Mar · Apr') }}"
-        : "🟠 {{ __('High Season — May · Jun · Jul · Aug · Sep · Oct · Nov · Dec') }}";
+    if (noteEl) {
+        noteEl.textContent = low
+            ? noteEl.getAttribute('data-low-text')
+            : noteEl.getAttribute('data-high-text');
+    }
 })();
 
-// ─── Sticky/Mobile Calendar ────────────────────────────────────
-const monthNames = [
-    "{{ __('January') }}", "{{ __('February') }}", "{{ __('March') }}", "{{ __('April') }}", 
-    "{{ __('May') }}", "{{ __('June') }}", "{{ __('July') }}", "{{ __('August') }}", 
-    "{{ __('September') }}", "{{ __('October') }}", "{{ __('November') }}", "{{ __('December') }}"
-];
+function calculateTotal(ci, co) {
+    let total = 0; 
+    let cur = new Date(ci);
+    let dayCount = 0;
+    while (cur < co) {
+        let isMealDay = dayCount < currentMealDays;
+        total += getDayPrice(cur, currentMealPlan, isMealDay);
+        cur.setDate(cur.getDate() + 1);
+        dayCount++;
+    }
+    return total;
+}
+
+function updateAllSummaries() {
+    updateSummary();
+    updateInlineSummary();
+    updatePreFilledSummaries();
+}
+
+function updatePreFilledSummaries() {
+    const checkinStr = "{{ $checkin }}";
+    const checkoutStr = "{{ $checkout }}";
+
+    if (checkinStr !== "" && checkoutStr !== "") {
+        const ci = new Date(checkinStr);
+        const co = new Date(checkoutStr);
+        const nights = Math.round((co - ci) / 86400000);
+        
+        if (document.getElementById('meal-days-desk') && document.getElementById('meal-days-desk').options.length === 0) {
+            populateMealDaysSelects(nights);
+        }
+
+        const total = calculateTotal(ci, co);
+        
+        const deskPre = document.getElementById('summary-total-desk-pre');
+        if (deskPre) deskPre.textContent = '$' + total;
+        
+        const mobPre = document.getElementById('summary-total-mob-pre');
+        if (mobPre) mobPre.textContent = '$' + total;
+    }
+}
+
+// ─── Calendar ──────────────────────────────────────────────────
+const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 let calYear = new Date().getFullYear(), calMonth = new Date().getMonth();
 let checkIn = null, checkOut = null, selectingCheckout = false;
 
@@ -585,18 +885,21 @@ function buildGrid(gridEl, isMobile) {
     for (let i = 0; i < firstDay; i++) gridEl.appendChild(document.createElement('div'));
     for (let d = 1; d <= daysInMonth; d++) {
         const date = new Date(calYear, calMonth, d); date.setHours(0,0,0,0);
-        const price = getDayPrice(date), low = isLowSeason(date);
+        const price = getDayPrice(date, 'BB'); 
+        const low = isLowSeason(date);
         const isPast = date < today;
         const isCI = checkIn && date.getTime() === checkIn.getTime();
         const isCO = checkOut && date.getTime() === checkOut.getTime();
         const isInRange = checkIn && checkOut && date > checkIn && date < checkOut;
         const cell = document.createElement('button'); cell.type = 'button'; cell.disabled = isPast;
+        
         let base = isMobile ? 'relative flex flex-col items-center justify-center rounded-lg py-1.5 px-0.5 text-center transition duration-150 w-full ' : 'relative flex flex-col items-center justify-center rounded-lg py-1 px-0.5 text-center transition duration-150 ';
         if (isPast) base += 'opacity-30 cursor-not-allowed ';
         else if (isCI || isCO) base += 'bg-kigongoniOrange text-white shadow-md scale-105 z-10 ';
         else if (isInRange) base += 'bg-kigongoniOrange/30 text-kigongoniOrange dark:text-orange-300 border border-kigongoniOrange/50 ';
         else if (low) base += 'bg-kigongoniBlue/5 dark:bg-kigongoniBlue/20 hover:bg-kigongoniOrange/20 hover:border-kigongoniOrange text-gray-700 dark:text-gray-200 border border-kigongoniBlue/20 ';
         else base += 'bg-kigongoniOrange/5 dark:bg-kigongoniOrange/10 hover:bg-kigongoniOrange/20 hover:border-kigongoniOrange text-gray-700 dark:text-gray-200 border border-kigongoniOrange/20 ';
+        
         cell.className = base;
         const pc = (isCI||isCO) ? 'text-white/90' : isInRange ? 'text-kigongoniOrange font-black' : (low ? 'text-kigongoniBlue dark:text-blue-300' : 'text-kigongoniOrange');
         const ns = isMobile ? 'text-[12px]' : 'text-[11px]', ps = isMobile ? 'text-[9px]' : 'text-[8px]';
@@ -619,7 +922,13 @@ function onDayClick(date) {
     else if (selectingCheckout) {
         if (date.getTime() === checkIn.getTime()) { checkIn = null; checkOut = null; selectingCheckout = false; }
         else if (date < checkIn) { checkIn = date; checkOut = null; }
-        else { checkOut = date; selectingCheckout = false; updateSummary(); }
+        else { 
+            checkOut = date; 
+            selectingCheckout = false;
+            const nights = Math.round((checkOut - checkIn) / 86400000);
+            populateMealDaysSelects(nights);
+            updateSummary(); 
+        }
     }
     renderCalendar();
 }
@@ -627,14 +936,14 @@ function onDayClick(date) {
 function updateSummary() {
     if (!checkIn || !checkOut) { ['date-summary','date-summary-mob'].forEach(id => document.getElementById(id)?.classList.add('hidden')); return; }
     const fmt = d => d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
-    let total = 0; let cur = new Date(checkIn);
-    while (cur < checkOut) { total += getDayPrice(cur); cur.setDate(cur.getDate() + 1); }
     const nights = Math.round((checkOut - checkIn) / 86400000);
-    const totalStr = '$' + total + ' (' + nights + ' ' + (nights > 1 ? "{{ __('nights') }}" : "{{ __('night') }}") + ')';
+    const total = calculateTotal(checkIn, checkOut);
+    const totalStr = '$' + total + ' (' + nights + ' ' + (nights > 1 ? "{{ __('Nights') }}" : "{{ __('Night') }}") + ')';
+    
     const sumD = document.getElementById('date-summary');
     if (sumD) { document.getElementById('summary-checkin').textContent = fmt(checkIn); document.getElementById('summary-checkout').textContent = fmt(checkOut); document.getElementById('summary-total').textContent = totalStr; sumD.classList.remove('hidden'); }
     const sumM = document.getElementById('date-summary-mob');
-    if (sumM) { document.getElementById('summary-checkin-mob').textContent = fmt(checkIn); document.getElementById('summary-checkout-mob').textContent = fmt(checkOut); document.getElementById('summary-total-mob').textContent = totalStr; sumM.classList.remove('hidden'); }
+    if (sumM) { document.getElementById('summary-checkin-mob').textContent = fmt(checkIn); document.getElementById('summary-checkout-mob').textContent = fmt(checkOut); document.getElementById('summary-total-mob').textContent = '$' + total; sumM.classList.remove('hidden'); }
 }
 
 document.getElementById('cal-prev')?.addEventListener('click', () => { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); });
@@ -644,33 +953,62 @@ document.getElementById('cal-next-mob')?.addEventListener('click', () => { calMo
 
 function toISO(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 
-function handleBookClick(guestsId) {
-    if (!checkIn || !checkOut) {
-        const isDark = document.documentElement.classList.contains('dark');
-        Swal.fire({
-            icon: 'warning',
-            title: "{{ __('Dates Not Selected') }}",
-            text: "{{ __('Please select your check-in and check-out dates first.') }}",
-            confirmButtonText: "{{ __('OK') }}",
-            confirmButtonColor: '#ef4a25',
-            background: isDark ? '#1f2937' : '#ffffff',
-            color: isDark ? '#ffffff' : '#374151',
-            customClass: {
-                popup: 'rounded-2xl border dark:border-gray-700',
-                title: 'text-kigongoniBlue dark:text-white font-black uppercase tracking-wide',
-                confirmButton: 'font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded-xl shadow-lg'
-            }
-        });
-        return;
+function handleBookClick(isPrefilled = false) {
+    let finalCheckIn, finalCheckOut, finalGuests;
+
+    if(isPrefilled) {
+        const checkinStr = "{{ $checkin }}";
+        const checkoutStr = "{{ $checkout }}";
+        if(checkinStr !== "" && checkoutStr !== "") {
+            finalCheckIn = new Date(checkinStr);
+            finalCheckOut = new Date(checkoutStr);
+            finalGuests = "{{ $guests }}";
+        }
+    } else {
+        if (!checkIn || !checkOut) {
+            const isDark = document.documentElement.classList.contains('dark');
+            Swal.fire({
+                icon: 'warning',
+                title: "{{ __('Dates Not Selected') }}",
+                text: "{{ __('Please select your check-in and check-out dates first.') }}",
+                confirmButtonText: "{{ __('OK') }}",
+                confirmButtonColor: '#ef4a25',
+                background: isDark ? '#1f2937' : '#ffffff',
+                color: isDark ? '#ffffff' : '#374151',
+                customClass: {
+                    popup: 'rounded-2xl border dark:border-gray-700',
+                    title: 'text-kigongoniBlue dark:text-white font-black uppercase tracking-wide',
+                    confirmButton: 'font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded-xl shadow-lg'
+                }
+            });
+            return;
+        }
+        finalCheckIn = checkIn;
+        finalCheckOut = checkOut;
+        finalGuests = document.getElementById('cal-guests')?.value || document.getElementById('cal-guests-mob')?.value || 'Family (4+)';
     }
-    const guests = document.getElementById(guestsId)?.value || 'Family (4+)';
-    const params = new URLSearchParams({ checkin: toISO(checkIn), checkout: toISO(checkOut), guests, room_type: 'Standard Family Room', room_price: getDayPrice(checkIn) });
+
+    const params = new URLSearchParams({ 
+        checkin: toISO(finalCheckIn), 
+        checkout: toISO(finalCheckOut), 
+        guests: finalGuests, 
+        room_type: 'Standard Family Room', 
+        room_price: getDayPrice(finalCheckIn, 'BB'),
+        meal_plan:  currentMealPlan,
+        meal_days:  currentMealDays
+    });
     window.location.href = checkoutRoute + '?' + params.toString();
 }
 
-document.getElementById('cal-book-btn')?.addEventListener('click', () => handleBookClick('cal-guests'));
-document.getElementById('cal-book-btn-mob')?.addEventListener('click', () => handleBookClick('cal-guests-mob'));
+document.getElementById('cal-book-btn-pre')?.addEventListener('click', () => handleBookClick(true));
+document.getElementById('cal-book-btn-mob-pre')?.addEventListener('click', () => handleBookClick(true));
+
+document.getElementById('cal-book-btn')?.addEventListener('click', () => handleBookClick(false));
+document.getElementById('cal-book-btn-mob')?.addEventListener('click', () => handleBookClick(false));
+
 renderCalendar();
+initMealUI();
+updatePreFilledSummaries();
 
 // ─── Inline Change-Dates Calendar ─────────────────────────────
 let inlineYear = new Date().getFullYear(), inlineMonth = new Date().getMonth();
@@ -697,18 +1035,21 @@ function buildInlineGrid() {
     for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
     for (let d = 1; d <= daysInMonth; d++) {
         const date = new Date(inlineYear, inlineMonth, d); date.setHours(0,0,0,0);
-        const price = getDayPrice(date), low = isLowSeason(date);
+        const price = getDayPrice(date, 'BB'); 
+        const low = isLowSeason(date);
         const isPast = date < today;
         const isCI = inlineCheckIn && date.getTime() === inlineCheckIn.getTime();
         const isCO = inlineCheckOut && date.getTime() === inlineCheckOut.getTime();
         const isInRange = inlineCheckIn && inlineCheckOut && date > inlineCheckIn && date < inlineCheckOut;
         const cell = document.createElement('button'); cell.type = 'button'; cell.disabled = isPast;
+        
         let cls = 'flex flex-col items-center justify-center rounded-lg py-1.5 px-0.5 text-center transition duration-150 w-full ';
         if (isPast) cls += 'opacity-30 cursor-not-allowed ';
         else if (isCI || isCO) cls += 'bg-kigongoniOrange text-white shadow-md scale-105 z-10 ';
         else if (isInRange) cls += 'bg-kigongoniOrange/25 text-kigongoniOrange border border-kigongoniOrange/40 ';
         else if (low) cls += 'bg-kigongoniBlue/5 dark:bg-kigongoniBlue/20 hover:bg-kigongoniOrange/20 text-gray-700 dark:text-gray-200 border border-kigongoniBlue/20 hover:border-kigongoniOrange ';
         else cls += 'bg-kigongoniOrange/5 dark:bg-kigongoniOrange/10 hover:bg-kigongoniOrange/20 text-gray-700 dark:text-gray-200 border border-kigongoniOrange/20 hover:border-kigongoniOrange ';
+        
         cell.className = cls;
         const pc = (isCI||isCO) ? 'text-white/90' : (low ? 'text-kigongoniBlue dark:text-blue-300' : 'text-kigongoniOrange');
         cell.innerHTML = `<span class="text-[11px] font-black leading-none">${d}</span><span class="text-[8px] font-bold leading-none mt-0.5 ${pc}">$${price}</span>`;
@@ -726,17 +1067,15 @@ function renderInlineCal() {
 function onInlineDayClick(date) {
     if (!inlineCheckIn || (inlineCheckIn && inlineCheckOut)) {
         inlineCheckIn = date; inlineCheckOut = null; inlineSelectingOut = true;
-        document.getElementById('inline-mode-label').textContent = "{{ __('Now select your check-out date') }}";
     } else if (inlineSelectingOut) {
         if (date.getTime() === inlineCheckIn.getTime()) {
             inlineCheckIn = null; inlineCheckOut = null; inlineSelectingOut = false;
-            document.getElementById('inline-mode-label').textContent = "{{ __('Select your check-in date') }}";
         } else if (date < inlineCheckIn) {
             inlineCheckIn = date; inlineCheckOut = null;
-            document.getElementById('inline-mode-label').textContent = "{{ __('Now select your check-out date') }}";
         } else {
             inlineCheckOut = date; inlineSelectingOut = false;
-            document.getElementById('inline-mode-label').textContent = "{{ __('✓ Dates selected — confirm below') }}";
+            const nights = Math.round((inlineCheckOut - inlineCheckIn) / 86400000);
+            populateMealDaysSelects(nights);
         }
     }
     renderInlineCal();
@@ -749,13 +1088,14 @@ function updateInlineSummary() {
     const niEl = document.getElementById('inline-nights-display');
     const toEl = document.getElementById('inline-total-display');
     const btn  = document.getElementById('inline-confirm-btn');
-    if (ciEl) ciEl.textContent = inlineCheckIn  ? fmt(inlineCheckIn)  : "— {{ __('Select date') }}";
-    if (coEl) coEl.textContent = inlineCheckOut ? fmt(inlineCheckOut) : "— {{ __('Select date') }}";
+    
+    if (ciEl) ciEl.textContent = inlineCheckIn  ? fmt(inlineCheckIn)  : '{{ __("— Select date") }}';
+    if (coEl) coEl.textContent = inlineCheckOut ? fmt(inlineCheckOut) : '{{ __("— Select date") }}';
+    
     if (inlineCheckIn && inlineCheckOut) {
-        let total = 0; let cur = new Date(inlineCheckIn);
-        while (cur < inlineCheckOut) { total += getDayPrice(cur); cur.setDate(cur.getDate() + 1); }
+        const total = calculateTotal(inlineCheckIn, inlineCheckOut);
         const nights = Math.round((inlineCheckOut - inlineCheckIn) / 86400000);
-        if (niEl) niEl.textContent = nights + ' ' + (nights > 1 ? "{{ __('nights') }}" : "{{ __('night') }}");
+        if (niEl) niEl.textContent = nights + ' ' + (nights > 1 ? "{{ __('Nights') }}" : "{{ __('Night') }}");
         if (toEl) toEl.textContent = '$' + total;
         if (btn)  { btn.disabled = false; btn.classList.remove('opacity-50','cursor-not-allowed'); }
     } else {
@@ -769,7 +1109,16 @@ document.getElementById('inline-confirm-btn')?.addEventListener('click', () => {
     if (!inlineCheckIn || !inlineCheckOut) return;
     const guests = document.getElementById('inline-guests')?.value || 'Family (4+)';
     const fmt = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-    const params = new URLSearchParams({ checkin: fmt(inlineCheckIn), checkout: fmt(inlineCheckOut), guests, room_type: 'Standard Family Room', room_price: getDayPrice(inlineCheckIn) });
+    
+    const params = new URLSearchParams({ 
+        checkin: fmt(inlineCheckIn), 
+        checkout: fmt(inlineCheckOut), 
+        guests, 
+        room_type: 'Standard Family Room', 
+        room_price: getDayPrice(inlineCheckIn, 'BB'),
+        meal_plan:  currentMealPlan,
+        meal_days:  currentMealDays
+    });
     window.location.href = window.location.pathname + '?' + params.toString();
 });
 
@@ -778,11 +1127,11 @@ document.getElementById('inline-cal-next')?.addEventListener('click', () => { in
 
 // ─── Lightbox ─────────────────────────────────────────────────
 const galleryImages = [
-    { src: "{{ asset('images/rooms/standard-family/main.jpg') }}",      fallback: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=80', label: "{{ __('Main View') }}" },
-    { src: "{{ asset('images/rooms/standard-family/bathroom.jpg') }}",  fallback: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1200&q=80', label: "{{ __('Bathroom') }}" },
-    { src: "{{ asset('images/rooms/standard-family/desk.jpg') }}",      fallback: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80', label: "{{ __('Desk Area') }}" },
-    { src: "{{ asset('images/rooms/standard-family/view.jpg') }}",      fallback: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80', label: "{{ __('Room View') }}" },
-    { src: "{{ asset('images/rooms/standard-family/window.jpg') }}",    fallback: 'https://images.unsplash.com/photo-1595599872002-9154efcf5b8e?auto=format&fit=crop&w=1200&q=80', label: "{{ __('Window') }}" },
+    { src: "{{ asset('images/rooms/standard-family/main.jpg') }}",      fallback: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=80', label: '{{ __("Main View") }}' },
+    { src: "{{ asset('images/rooms/standard-family/bathroom.jpg') }}",  fallback: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1200&q=80', label: '{{ __("Bathroom") }}' },
+    { src: "{{ asset('images/rooms/standard-family/desk.jpg') }}",      fallback: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=80', label: '{{ __("Desk Area") }}' },
+    { src: "{{ asset('images/rooms/standard-family/view.jpg') }}",      fallback: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80', label: '{{ __("Room View") }}' },
+    { src: "{{ asset('images/rooms/standard-family/window.jpg') }}",    fallback: 'https://images.unsplash.com/photo-1595599872002-9154efcf5b8e?auto=format&fit=crop&w=1200&q=80', label: '{{ __("Window") }}' },
 ];
 let currentImg = 0;
 

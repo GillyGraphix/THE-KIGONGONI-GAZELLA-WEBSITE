@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
 
-    {{-- ── PWA & MOBILE APP SETTINGS (HATUA YA 3) ────────────────── --}}
+    {{-- ── PWA & MOBILE APP SETTINGS ────────────────── --}}
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <meta name="theme-color" content="#ef4a25">
     <meta name="mobile-web-app-capable" content="yes">
@@ -27,9 +27,10 @@
             });
         }
     </script>
-    {{-- ────────────────────────────────────────────────────────── --}}
     
+    {{-- Tailwind & Alpine.js --}}
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -58,369 +59,73 @@
     </script>
     
     <style>
-        html, body {
-            max-width: 100%;
-        }
-
+        html, body { max-width: 100%; }
         body { font-family: 'Poppins', sans-serif; }
         .mobile-menu-open { overflow: hidden; }
         .hashtag-style { font-variant: small-caps; }
         .fi { border-radius: 2px; box-shadow: 0 0 1px rgba(0,0,0,0.3); }
         
-        /* ----------------------------------------------------
-           STYLE YA MSTARI UNAOHAMAHAMA (SCROLL SPY)
-           ---------------------------------------------------- */
-        .nav-link {
-            position: relative;
-            padding-bottom: 6px;
-            display: inline-block;
-            transition: color 0.3s ease;
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #ef4a25;
-            transition: width 0.3s ease;
-        }
-        
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
-        
-        .nav-link.active, .dark .nav-link.active {
-            color: #ef4a25 !important; 
-        }
+        /* STYLE YA MSTARI UNAOHAMAHAMA (SCROLL SPY) */
+        .nav-link { position: relative; padding-bottom: 6px; display: inline-block; transition: color 0.3s ease; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 3px; bottom: -2px; left: 50%; transform: translateX(-50%); background-color: #ef4a25; transition: width 0.3s ease-in-out; border-radius: 2px; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active, .dark .nav-link.active { color: #ef4a25 !important; font-weight: 600; }
 
-        /* ----------------------------------------------------
-           ANIMATIONS ZA FOOTER GRID NA GLOW
-           ---------------------------------------------------- */
-        @keyframes moveGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; } 
-        }
+        @keyframes moveGrid { 0% { background-position: 0 0; } 100% { background-position: 50px 50px; } }
+        @keyframes pulseGlow { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.3); } }
 
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
-        }
-
-        /* ----------------------------------------------------
-           STUDIO WAVES ANIMATIONS
-           ---------------------------------------------------- */
-        .wave-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 3px;
-            height: 16px;
-        }
-        .wave-bar {
-            width: 3px;
-            background-color: white;
-            border-radius: 3px;
-            animation: bounceWave 1s infinite ease-in-out;
-            transform-origin: bottom;
-        }
-        
+        .wave-container { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 16px; }
+        .wave-bar { width: 3px; background-color: white; border-radius: 3px; animation: bounceWave 1s infinite ease-in-out; transform-origin: bottom; }
         .wave-bar:nth-child(1) { animation-delay: 0.0s; height: 8px; }
         .wave-bar:nth-child(2) { animation-delay: 0.2s; height: 16px; }
         .wave-bar:nth-child(3) { animation-delay: 0.4s; height: 10px; }
         .wave-bar:nth-child(4) { animation-delay: 0.1s; height: 14px; }
-        
-        .waves-paused .wave-bar {
-            animation-play-state: paused;
-            height: 4px !important;
-            transition: height 0.3s ease;
-        }
+        .waves-paused .wave-bar { animation-play-state: paused; height: 4px !important; transition: height 0.3s ease; }
 
-        @keyframes bounceWave {
-            0%, 100% { transform: scaleY(0.5); }
-            50% { transform: scaleY(1.1); }
-        }
+        @keyframes bounceWave { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1.1); } }
+        @keyframes breatheGlow { 0%, 100% { transform: scale(1.0); box-shadow: 0 0 10px rgba(239, 74, 37, 0.4); } 50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(239, 74, 37, 0.8); } }
+        .vibe-breathe { animation: breatheGlow 2.5s ease-in-out infinite; }
 
-        /* ----------------------------------------------------
-           ANIMATION MPYA: BREATHING GLOW
-           ---------------------------------------------------- */
-        @keyframes breatheGlow {
-            0%, 100% {
-                transform: scale(1.0);
-                box-shadow: 0 0 10px rgba(239, 74, 37, 0.4);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 25px rgba(239, 74, 37, 0.8);
-            }
-        }
-        
-        .vibe-breathe {
-            animation: breatheGlow 2.5s ease-in-out infinite;
-        }
-
-        /* ----------------------------------------------------
-           WHATSAPP POPUP STYLES
-           ---------------------------------------------------- */
-        .whatsapp-float-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 9999;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        .whatsapp-button {
-            width: 60px;
-            height: 60px;
-            background: #25D366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 10000;
-        }
-
-        .whatsapp-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
-            background: #20b859;
-        }
-
-        .whatsapp-popup {
-            position: absolute;
-            bottom: 75px;
-            right: 0;
-            width: 340px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            overflow: hidden;
-            z-index: 9999;
-        }
-
-        .whatsapp-popup.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .popup-header {
-            background: #075E54;
-            color: white;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-logo {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: white;
-            border: 2px solid white;
-        }
-
-        .header-title {
-            flex: 1;
-            font-weight: 600;
-            font-size: 15px;
-            color: white;
-        }
-
-        .popup-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            line-height: 1;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-
-        .popup-close:hover {
-            opacity: 1;
-        }
-
-        .popup-body {
-            padding: 20px;
-        }
-
-        .online-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .online-dot {
-            width: 8px;
-            height: 8px;
-            background: #25D366;
-            border-radius: 50%;
-            display: inline-block;
-            position: relative;
-        }
-
-        .online-dot::after {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: rgba(37, 211, 102, 0.3);
-            border-radius: 50%;
-            top: -2px;
-            left: -2px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .online-text {
-            font-size: 13px;
-            color: #8696a0;
-        }
-
-        .hotel-message {
-            background: #f0f9f4;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #dcfce7;
-        }
-
-        .greeting-text {
-            margin: 0 0 8px 0;
-            font-size: 14px;
-            color: #1f2e3a;
-        }
-
-        .wave {
-            font-size: 16px;
-            margin-left: 4px;
-        }
-
-        .offer-text {
-            margin: 0;
-            font-size: 14px;
-            color: #41525d;
-            line-height: 1.5;
-        }
-
-        .whatsapp-chat-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: #25D366;
-            color: white;
-            text-decoration: none;
-            padding: 14px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 15px;
-            transition: background 0.3s;
-            margin-bottom: 20px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .whatsapp-chat-btn:hover {
-            background: #128C7E;
-        }
-
-        .popup-footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 12px;
-            color: #8696a0;
-            padding-top: 8px;
-            border-top: 1px solid #e9edf0;
-        }
-
-        .footer-online {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-
-        .online-indicator {
-            font-size: 12px;
-        }
-
-        .footer-separator {
-            color: #d0d9e0;
-        }
-
-        .privacy-link {
-            color: #075E54;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .privacy-link:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 480px) {
-            .whatsapp-popup {
-                width: 300px;
-                right: 0;
-                bottom: 70px;
-            }
-            .whatsapp-float-container {
-                bottom: 20px;
-                right: 20px;
-            }
-            .whatsapp-button {
-                width: 55px;
-                height: 55px;
-            }
-            #vibe-btn-container {
-                bottom: 20px;
-                left: 20px;
-            }
-        }
+        /* WHATSAPP POPUP STYLES */
+        .whatsapp-float-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .whatsapp-button { width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); transition: all 0.3s ease; position: relative; z-index: 10000; }
+        .whatsapp-button:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4); background: #20b859; }
+        .whatsapp-popup { position: absolute; bottom: 75px; right: 0; width: 340px; background: white; border-radius: 24px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.1); opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; overflow: hidden; z-index: 9999; }
+        .whatsapp-popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .popup-header { background: #075E54; color: white; padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+        .header-logo { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: white; border: 2px solid white; }
+        .header-title { flex: 1; font-weight: 600; font-size: 15px; color: white; }
+        .popup-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; line-height: 1; opacity: 0.8; transition: opacity 0.2s; }
+        .popup-close:hover { opacity: 1; }
+        .popup-body { padding: 20px; }
+        .online-status { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+        .online-dot { width: 8px; height: 8px; background: #25D366; border-radius: 50%; display: inline-block; position: relative; }
+        .online-dot::after { content: ''; position: absolute; width: 12px; height: 12px; background: rgba(37, 211, 102, 0.3); border-radius: 50%; top: -2px; left: -2px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        .online-text { font-size: 13px; color: #8696a0; }
+        .hotel-message { background: #f0f9f4; border-radius: 12px; padding: 16px; margin-bottom: 20px; border: 1px solid #dcfce7; }
+        .greeting-text { margin: 0 0 8px 0; font-size: 14px; color: #1f2e3a; }
+        .wave { font-size: 16px; margin-left: 4px; }
+        .offer-text { margin: 0; font-size: 14px; color: #41525d; line-height: 1.5; }
+        .whatsapp-chat-btn { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25D366; color: white; text-decoration: none; padding: 14px 20px; border-radius: 40px; font-weight: 600; font-size: 15px; transition: background 0.3s; margin-bottom: 20px; border: none; cursor: pointer; width: 100%; }
+        .whatsapp-chat-btn:hover { background: #128C7E; }
+        .popup-footer { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 12px; color: #8696a0; padding-top: 8px; border-top: 1px solid #e9edf0; }
+        .footer-online { display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .online-indicator { font-size: 12px; }
+        .footer-separator { color: #d0d9e0; }
+        .privacy-link { color: #075E54; text-decoration: none; font-weight: 500; }
+        .privacy-link:hover { text-decoration: underline; }
+        @media (max-width: 480px) { .whatsapp-popup { width: 300px; right: 0; bottom: 70px; } .whatsapp-float-container { bottom: 20px; right: 20px; } .whatsapp-button { width: 55px; height: 55px; } #vibe-btn-container { bottom: 20px; left: 20px; } }
     </style>
-    
 </head>
 
 <body id="home" class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 relative">
 
-    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 border-b-4 border-kigongoniOrange transition-colors duration-300">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center max-w-7xl">
+    <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 border-b-4 border-kigongoniOrange transition-colors duration-300 relative">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center max-w-7xl relative z-20 bg-white dark:bg-gray-900">
             
             <a href="{{ url('/') }}" class="flex items-center">
-                <img 
-                    src="{{ asset('images/logo.png') }}" 
-                    alt="Kigongoni Gazella Logo" 
-                    class="h-12 md:h-16 w-auto object-contain transition-all duration-300 hover:scale-105
-                           dark:brightness-0 dark:invert"
-                >
+                <img src="{{ asset('images/logo.png') }}" alt="Kigongoni Gazella Logo" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 hover:scale-105 dark:brightness-0 dark:invert">
                 <span class="sr-only">Kigongoni Gazella Hotel</span>
             </a>
 
@@ -436,40 +141,37 @@
             </ul>
 
             <div class="flex items-center space-x-3 md:space-x-4">
-                
                 <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition">
-                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
-                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                    </svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                 </button>
 
-                <a href="{{ url('/') }}#booking" class="hidden sm:block bg-kigongoniOrange text-white px-5 py-2 rounded-md font-bold hover:bg-kigongoniBlue dark:hover:bg-gray-800 transition duration-300 shadow-md text-sm">
-                    BOOK NOW
-                </a>
+                <a href="{{ url('/') }}#booking" class="hidden sm:block bg-kigongoniOrange text-white px-5 py-2 rounded-md font-bold hover:bg-kigongoniBlue dark:hover:bg-gray-800 transition duration-300 shadow-md text-sm">BOOK NOW</a>
                 
-                <button id="mobile-menu-button" class="lg:hidden text-kigongoniBlue dark:text-gray-300 focus:outline-none ml-2">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
+                {{-- HAMBURGER BUTTON MPYA ILIYO NA ANIMATION (INAGEUKA 'X') --}}
+                <button id="mobile-menu-button" class="lg:hidden text-kigongoniBlue dark:text-gray-300 focus:outline-none ml-2 w-10 h-10 relative flex flex-col justify-center items-center gap-[6px] z-50">
+                    <span id="hamburger-line-1" class="w-6 h-[2px] bg-current rounded-full transform transition-all duration-300 ease-in-out"></span>
+                    <span id="hamburger-line-2" class="w-6 h-[2px] bg-current rounded-full transform transition-all duration-300 ease-in-out"></span>
+                    <span id="hamburger-line-3" class="w-6 h-[2px] bg-current rounded-full transform transition-all duration-300 ease-in-out"></span>
                 </button>
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden lg:hidden bg-kigongoniBlue dark:bg-gray-900 text-white absolute w-full left-0 top-full shadow-xl">
-            <ul class="flex flex-col p-6 space-y-4 font-semibold">
-                <li><a href="{{ url('/') }}#home" class="nav-link border-b border-gray-700 pb-2 block">HOME</a></li>
-                <li><a href="{{ url('/') }}#about" class="nav-link border-b border-gray-700 pb-2 block">ABOUT</a></li>
-                <li><a href="{{ url('/') }}#rooms" class="nav-link border-b border-gray-700 pb-2 block">ACCOMMODATION</a></li>
-                <li><a href="{{ url('/') }}#meetings" class="nav-link border-b border-gray-700 pb-2 block">MEETINGS & EVENTS</a></li>
-                <li><a href="{{ url('/') }}#restaurant" class="nav-link border-b border-gray-700 pb-2 block">RESTAURANT & BARS</a></li>
-                <li><a href="{{ url('/') }}#services" class="nav-link border-b border-gray-700 pb-2 block">SERVICES</a></li>
-                <li><a href="{{ url('/') }}#gallery" class="nav-link border-b border-gray-700 pb-2 block">GALLERY</a></li>
-                <li><a href="{{ url('/') }}#contact" class="nav-link border-b border-gray-700 pb-2 block">CONTACTS</a></li>
-                <li><a href="{{ url('/') }}#booking" class="bg-kigongoniOrange text-center py-3 rounded-md block">BOOK NOW</a></li>
-            </ul>
+        {{-- SLIDE-DOWN DROPDOWN MENU MPYA --}}
+        <div id="mobile-menu-wrapper" class="hidden lg:hidden absolute w-full left-0 top-full transition-all duration-300 ease-out opacity-0 pointer-events-none transform -translate-y-4 -z-10 shadow-xl border-t border-gray-100 dark:border-gray-800">
+            <div class="bg-white dark:bg-gray-900 text-kigongoniBlue dark:text-white">
+                <ul class="flex flex-col p-6 space-y-4 font-semibold">
+                    <li><a href="{{ url('/') }}#home" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">HOME</a></li>
+                    <li><a href="{{ url('/') }}#about" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">ABOUT</a></li>
+                    <li><a href="{{ url('/') }}#rooms" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">ACCOMMODATION</a></li>
+                    <li><a href="{{ url('/') }}#meetings" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">MEETINGS & EVENTS</a></li>
+                    <li><a href="{{ url('/') }}#restaurant" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">RESTAURANT & BARS</a></li>
+                    <li><a href="{{ url('/') }}#services" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">SERVICES</a></li>
+                    <li><a href="{{ url('/') }}#gallery" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">GALLERY</a></li>
+                    <li><a href="{{ url('/') }}#contact" class="nav-link border-b border-gray-100 dark:border-gray-800 pb-2 block">CONTACTS</a></li>
+                    <li><a href="{{ url('/') }}#booking" class="bg-kigongoniOrange text-white text-center py-3 rounded-md block mt-2">BOOK NOW</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -479,79 +181,48 @@
         </main>
 
         <footer id="main-footer" class="bg-kigongoniBlue dark:bg-gray-950 text-gray-300 pt-20 pb-8 mt-20 relative border-t-4 border-kigongoniOrange transition-colors duration-300 overflow-hidden">
-            
             <div class="absolute inset-0 z-0 pointer-events-none" style="mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse at top center, black 10%, transparent 80%);">
-                <div class="absolute inset-0 opacity-[0.25]" 
-                     style="background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px); 
-                            background-size: 50px 50px; 
-                            animation: moveGrid 3s linear infinite;">
-                </div>
-                <div class="absolute inset-0" 
-                     style="background: radial-gradient(circle at top center, rgba(239, 74, 37, 2) 0%, transparent 85%); 
-                            animation: pulseGlow 1s ease-in-out infinite;">
-                </div>
+                <div class="absolute inset-0 opacity-[0.25]" style="background-image: linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px); background-size: 50px 50px; animation: moveGrid 3s linear infinite;"></div>
+                <div class="absolute inset-0" style="background: radial-gradient(circle at top center, rgba(239, 74, 37, 2) 0%, transparent 85%); animation: pulseGlow 1s ease-in-out infinite;"></div>
             </div>
 
             <div class="container mx-auto px-4 max-w-7xl relative z-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                    
                     <div class="space-y-6">
                         <img src="{{ asset('images/logo.png') }}" alt="Kigongoni Gazella Logo" class="h-16 w-auto brightness-0 invert">
-                        <p class="text-sm leading-relaxed text-gray-400 mb-6">
-                            Experience the ultimate safari gateway in Mto wa Mbu, Manyara. Kigongoni Gazella Hotel offers unmatched comfort, culture, and nature for an unforgettable stay.
-                        </p>
-                        
+                        <p class="text-sm leading-relaxed text-gray-400 mb-6">Experience the ultimate safari gateway in Mto wa Mbu, Manyara. Kigongoni Gazella Hotel offers unmatched comfort, culture, and nature for an unforgettable stay.</p>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
-                                    OUR SOCIALS
-                                    <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
-                                </h4>
+                                <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">OUR SOCIALS<span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span></h4>
                                 <div class="flex flex-col space-y-3">
                                     <a href="https://www.instagram.com/kigongonigazellahotel?igsh=aTQ4enpzdHJxOXQy" target="_blank" class="flex items-center gap-3 group">
-                                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
-                                        </div>
+                                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg></div>
                                         <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Hotel IG</span>
                                     </a>
                                     <a href="https://www.instagram.com/kigongoni_mini_supermarket?igsh=MWJwOW1nODk0YWhybQ==" target="_blank" class="flex items-center gap-3 group">
-                                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1">
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
-                                        </div>
+                                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 group-hover:bg-kigongoniOrange group-hover:text-white transition-all duration-300 group-hover:-translate-y-1"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg></div>
                                         <span class="text-sm text-gray-400 group-hover:text-white transition-colors">Supermarket</span>
                                     </a>
                                 </div>
                             </div>
-
                             <div class="ml-4 md:ml-8">
-                                <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">
-                                    REVIEW US ON
-                                    <span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span>
-                                </h4>
+                                <h4 class="text-xs font-bold text-white mb-4 uppercase tracking-wider relative inline-block">REVIEW US ON<span class="absolute -bottom-1 left-0 w-1/2 h-0.5 bg-kigongoniOrange rounded-full"></span></h4>
                                 <div class="flex items-start gap-5">
                                     <a href="https://www.tripadvisor.com/Profile/kigongonigazelahotel" target="_blank" class="flex flex-col items-center gap-2 group" title="Review us on TripAdvisor">
-                                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#34E0A1]/10 text-[#34E0A1] group-hover:bg-[#34E0A1] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm">
-                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.016 1.815c5.626 0 10.187 4.561 10.187 10.187S17.642 22.19 12.016 22.19 1.828 17.629 1.828 12.002c0-5.626 4.561-10.187 10.188-10.187zm0 1.572c-4.757 0-8.614 3.857-8.614 8.615s3.857 8.614 8.614 8.614 8.615-3.857 8.615-8.614-3.858-8.615-8.615-8.615zm-4.394 6.702c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm8.788 0c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm-4.394 6.275c-1.336 0-2.418-1.082-2.418-2.418s1.082-2.418 2.418-2.418c1.336 0 2.418 1.082 2.418 2.418s-1.082 2.418-2.418 2.418zm-4.394-5.334c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723zm8.788 0c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723z"/></svg>
-                                        </div>
+                                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#34E0A1]/10 text-[#34E0A1] group-hover:bg-[#34E0A1] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.016 1.815c5.626 0 10.187 4.561 10.187 10.187S17.642 22.19 12.016 22.19 1.828 17.629 1.828 12.002c0-5.626 4.561-10.187 10.188-10.187zm0 1.572c-4.757 0-8.614 3.857-8.614 8.615s3.857 8.614 8.614 8.614 8.615-3.857 8.615-8.614-3.858-8.615-8.615-8.615zm-4.394 6.702c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm8.788 0c1.783 0 3.228 1.445 3.228 3.228 0 1.783-1.445 3.228-3.228 3.228-1.784 0-3.229-1.445-3.229-3.228 0-1.783 1.445-3.228 3.229-3.228zm-4.394 6.275c-1.336 0-2.418-1.082-2.418-2.418s1.082-2.418 2.418-2.418c1.336 0 2.418 1.082 2.418 2.418s-1.082 2.418-2.418 2.418zm-4.394-5.334c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723zm8.788 0c-.952 0-1.723.772-1.723 1.723s.771 1.723 1.723 1.723c.951 0 1.723-.772 1.723-1.723s-.772-1.723-1.723-1.723z"/></svg></div>
                                         <span class="text-[10px] md:text-xs text-gray-400 group-hover:text-white transition-colors text-center">TripAdvisor</span>
                                     </a>
                                     <a href="https://share.google/b5DNapTL0jExr6Tdm" target="_blank" class="flex flex-col items-center gap-2 group" title="Review us on Google">
-                                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#EA4335]/10 text-[#EA4335] group-hover:bg-[#EA4335] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm">
-                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
-                                        </div>
+                                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-[#EA4335]/10 text-[#EA4335] group-hover:bg-[#EA4335] group-hover:text-white transition-all duration-300 group-hover:-translate-y-1 shadow-sm"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg></div>
                                         <span class="text-[10px] md:text-xs text-gray-400 group-hover:text-white transition-colors text-center">Google</span>
                                     </a>
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div>
-                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
-                            Quick Links
-                            <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
-                        </h3>
+                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">Quick Links<span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span></h3>
                         <ul class="space-y-3 text-sm">
                             <li><a href="{{ url('/') }}#about" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> About Us</a></li>
                             <li><a href="{{ url('/') }}#rooms" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Accommodation</a></li>
@@ -561,10 +232,7 @@
                     </div>
 
                     <div>
-                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
-                            Our Services
-                            <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
-                        </h3>
+                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">Our Services<span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span></h3>
                         <ul class="space-y-3 text-sm">
                             <li><a href="{{ url('/') }}#restaurant" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Restaurant & Bar</a></li>
                             <li><a href="{{ url('/') }}#meetings" class="text-gray-400 hover:text-kigongoniOrange transition-colors flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg> Meetings & Events</a></li>
@@ -574,10 +242,7 @@
                     </div>
 
                     <div>
-                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">
-                            Get in Touch
-                            <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span>
-                        </h3>
+                        <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider relative inline-block">Get in Touch<span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-kigongoniOrange rounded-full"></span></h3>
                         <ul class="space-y-4 text-sm">
                             <li class="flex items-start gap-3 text-gray-400">
                                 <svg class="w-5 h-5 text-kigongoniOrange flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -602,66 +267,34 @@
                         <p>All rights reserved.</p>
                     </div>
                     <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-0 md:bg-white/5 md:border md:border-white/10 md:rounded-lg overflow-hidden">
-                        <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                            <a href="{{ route('privacy') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">Privacy Policy</a>
-                        </li>
-                        <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                            <a href="{{ route('terms') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">Terms of Service</a>
-                        </li>
-                        <li class="border md:border-none border-white/10 rounded md:rounded-none">
-                            <a href="{{ route('faq') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors">FAQ</a>
-                        </li>
+                        <li class="border md:border-none border-white/10 rounded md:rounded-none"><a href="{{ route('privacy') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">Privacy Policy</a></li>
+                        <li class="border md:border-none border-white/10 rounded md:rounded-none"><a href="{{ route('terms') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors md:border-r md:border-white/10">Terms of Service</a></li>
+                        <li class="border md:border-none border-white/10 rounded md:rounded-none"><a href="{{ route('faq') }}" class="block px-4 py-2 hover:bg-white/10 hover:text-kigongoniOrange transition-colors">FAQ</a></li>
                     </ul>
                 </div>
             </div>
         </footer>
     </div>
 
-    {{-- ============================================================
-         HORIZONTAL EXPANDABLE MUSIC WIDGET (CHINI KUSHOTO)
-    ============================================================ --}}
+    {{-- HORIZONTAL EXPANDABLE MUSIC WIDGET (CHINI KUSHOTO) --}}
     <audio id="vibe-audio" loop preload="metadata">
         <source src="{{ asset('vibe.mp3') }}" type="audio/mpeg">
     </audio>
-
     <div id="vibe-btn-container" class="fixed bottom-6 left-6 z-[9999]">
-        {{-- Widget Container inayotanuka kwenda kulia --}}
         <div id="vibe-widget" class="relative w-14 h-14 bg-kigongoniOrange rounded-full shadow-2xl border-2 border-white/20 transition-all duration-300 ease-in-out flex flex-row items-center cursor-pointer overflow-hidden vibe-breathe group">
-            
-            {{-- HALI YA KWANZA (COLLAPSED) --}}
             <div id="vibe-collapsed" class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300 pointer-events-none">
-                <svg class="w-5 h-5 text-white group-hover:scale-110 transition-transform ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5.14v13.72a1 1 0 001.5.86l11.43-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z"/>
-                </svg>
+                <svg class="w-5 h-5 text-white group-hover:scale-110 transition-transform ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5.14v13.72a1 1 0 001.5.86l11.43-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z"/></svg>
                 <span class="text-white text-[9px] font-bold tracking-widest mt-0.5 hashtag-style">PLAY ME</span>
             </div>
-
-            {{-- HALI YA PILI (EXPANDED) --}}
             <div id="vibe-expanded" class="opacity-0 hidden w-full h-full flex flex-row items-center justify-between px-3 transition-opacity duration-300">
-                
-                {{-- Play/Pause Button --}}
                 <button id="vibe-play-pause" class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 text-white transition-colors cursor-pointer">
                     <svg id="vibe-play-icon" class="hidden w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
                     <svg id="vibe-pause-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                 </button>
-
-                {{-- Countdown Timer --}}
                 <div id="vibe-timer" class="text-white text-xs font-bold tracking-wider tabular-nums">0:00</div>
-
-                {{-- Waves --}}
-                <div id="vibe-waves" class="wave-container waves-paused">
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                </div>
-
-                {{-- Mshale wa Kufunga/Collapse --}}
-                <button id="vibe-collapse-btn" class="w-8 h-8 flex items-center justify-center text-white/60 hover:text-white shrink-0" title="Minimize">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                </button>
+                <div id="vibe-waves" class="wave-container waves-paused"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div>
+                <button id="vibe-collapse-btn" class="w-8 h-8 flex items-center justify-center text-white/60 hover:text-white shrink-0" title="Minimize"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
             </div>
-            
         </div>
     </div>
 
@@ -686,9 +319,7 @@
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.077 4.928C17.191 3.041 14.683 2 12.006 2 6.798 2 2.548 6.193 2.54 11.393c-.003 1.751.456 3.466 1.33 5.004L2.34 21.381c-.103.394.258.75.648.648l4.967-1.478c1.52.83 3.222 1.266 4.973 1.266h.004c5.2 0 9.454-4.195 9.462-9.396.004-2.51-.971-4.868-2.857-6.754l-.009-.008z"/></svg>
                     <span>WhatsApp Us</span>
                 </a>
-                <div class="popup-footer">
-                    <span class="footer-online"><span class="online-indicator">🟢</span> Online</span><span class="footer-separator">|</span><a href="{{ route('privacy') }}" class="privacy-link">Privacy policy</a>
-                </div>
+                <div class="popup-footer"><span class="footer-online"><span class="online-indicator">🟢</span> Online</span><span class="footer-separator">|</span><a href="{{ route('privacy') }}" class="privacy-link">Privacy policy</a></div>
             </div>
         </div>
     </div>
@@ -697,18 +328,176 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 15l7-7 7 7"></path></svg>
     </button>
 
-    {{-- PWA INSTALL BUTTON (Itafichwa mwanzo, itaonekana tu kama simu inaruhusu ku-install) --}}
-    <button id="pwa-install-btn" class="hidden fixed bottom-28 left-6 z-[9999] bg-white dark:bg-gray-800 text-kigongoniOrange border-2 border-kigongoniOrange px-4 py-2 rounded-full shadow-lg font-bold flex items-center gap-2 hover:bg-kigongoniOrange hover:text-white transition-all duration-300 group">
-        <svg class="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-        </svg>
-        <span class="text-sm">Install App</span>
-    </button>
+    {{-- PWA NON-INTRUSIVE INSTALL PROMPT (SESSION-BASED) --}}
+    <div x-data="{ show: false, deferredPrompt: null }" 
+        x-init="window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; if (!sessionStorage.getItem('kigongoni_pwa_dismissed')) { setTimeout(() => { show = true }, 3000); } });"
+        x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-10" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-10"
+        class="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:w-[360px] z-[9999] bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700" style="display: none;">
+        <div class="flex flex-col">
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="w-10 h-10 bg-orange-50 dark:bg-gray-700 rounded-xl flex items-center justify-center shrink-0"><svg class="w-6 h-6 text-kigongoniOrange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></div>
+                <h3 class="text-gray-800 dark:text-white font-black tracking-normal">Install Kigongoni App</h3>
+            </div>
+            <p class="text-gray-500 dark:text-gray-300 text-[13px] mb-5 leading-relaxed">Stay connected. Get instant updates, easily make bookings, and access our services directly from your home screen.</p>
+            <div class="flex gap-3">
+                <button @click="show = false; sessionStorage.setItem('kigongoni_pwa_dismissed', 'true')" class="flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-gray-500 hover:text-kigongoniOrange bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 rounded-lg transition">Not Now</button>
+                <button @click="deferredPrompt.prompt(); show = false;" class="flex-1 px-4 py-2.5 bg-kigongoniOrange text-white rounded-lg text-[11px] font-black uppercase tracking-widest shadow-lg shadow-kigongoniOrange/30 hover:bg-kigongoniBlue transition">Install Now</button>
+            </div>
+        </div>
+    </div>
 
+    {{-- SCRIPTS ZOTE TULIZOZIFANYIA KAZI --}}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // ── JAVASCRIPT YA HORIZONTAL ANIMATED EXPANDABLE MUSIC WIDGET ───
+            // ── WHATSAPP POPUP ───────────────────────────────────────
+            const whatsappBtn   = document.getElementById('whatsappButton');
+            const whatsappPopup = document.getElementById('whatsappPopup');
+            const closeBtn      = document.getElementById('closePopup');
+
+            if (whatsappBtn && whatsappPopup && closeBtn) {
+                whatsappBtn.addEventListener('click', (e) => { e.stopPropagation(); whatsappPopup.classList.toggle('active'); });
+                closeBtn.addEventListener('click', (e) => { e.stopPropagation(); whatsappPopup.classList.remove('active'); });
+                whatsappPopup.addEventListener('click', (e) => e.stopPropagation());
+                document.addEventListener('click', () => whatsappPopup.classList.remove('active'));
+            }
+
+            // ── MOBILE MENU (HAMBURGER TO X & SLIDE DOWN) ────────────────────
+            const btn = document.getElementById('mobile-menu-button');
+            const menuWrapper = document.getElementById('mobile-menu-wrapper');
+            const line1 = document.getElementById('hamburger-line-1');
+            const line2 = document.getElementById('hamburger-line-2');
+            const line3 = document.getElementById('hamburger-line-3');
+
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                
+                // Animate Hamburger to X
+                line1.classList.toggle('translate-y-[8px]');
+                line1.classList.toggle('rotate-45');
+                
+                line2.classList.toggle('opacity-0');
+                line2.classList.toggle('translate-x-3');
+                
+                line3.classList.toggle('-translate-y-[8px]');
+                line3.classList.toggle('-rotate-45');
+
+                // Animate Menu Sliding Down
+                if (isMenuOpen) {
+                    menuWrapper.classList.remove('hidden');
+                    // Timeout ndogo kutoa nafasi ya ku-render display:block kabla ya animation
+                    setTimeout(() => {
+                        menuWrapper.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
+                        menuWrapper.classList.add('opacity-100', 'translate-y-0');
+                    }, 10);
+                } else {
+                    menuWrapper.classList.remove('opacity-100', 'translate-y-0');
+                    menuWrapper.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+                    // Subiri animation iishe ndio tufiche kabisa (hidden)
+                    setTimeout(() => {
+                        if (!isMenuOpen) menuWrapper.classList.add('hidden');
+                    }, 400); 
+                }
+            }
+
+            if (btn && menuWrapper) {
+                btn.addEventListener('click', toggleMenu);
+                // Funga menu iwapo mteja akibonyeza link yoyote ndani
+                menuWrapper.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (isMenuOpen) toggleMenu();
+                    });
+                });
+            }
+
+            // ── DARK MODE ────────────────────────────────────────────────
+            const themeToggleDarkIcon  = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+
+            if (themeToggleDarkIcon && themeToggleLightIcon && themeToggleBtn) {
+                if (document.documentElement.classList.contains('dark')) {
+                    themeToggleLightIcon.classList.remove('hidden');
+                } else {
+                    themeToggleDarkIcon.classList.remove('hidden');
+                }
+
+                themeToggleBtn.addEventListener('click', function() {
+                    themeToggleDarkIcon.classList.toggle('hidden');
+                    themeToggleLightIcon.classList.toggle('hidden');
+                    if (localStorage.getItem('color-theme') === 'light') {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                    } else if (localStorage.getItem('color-theme') === 'dark') {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        if (document.documentElement.classList.contains('dark')) {
+                            document.documentElement.classList.remove('dark');
+                            localStorage.setItem('color-theme', 'light');
+                        } else {
+                            document.documentElement.classList.add('dark');
+                            localStorage.setItem('color-theme', 'dark');
+                        }
+                    }
+                });
+            }
+
+            // ── SCROLL TO TOP ────────────────────────────────────────────
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            if (scrollToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 400) {
+                        scrollToTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+                        scrollToTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
+                    } else {
+                        scrollToTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-4');
+                        scrollToTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                    }
+                });
+                scrollToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+
+            // ── SCROLL SPY ─────────────────────────────
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sectionIds = Array.from(navLinks)
+                .map(link => {
+                    const href = link.getAttribute('href');
+                    return href.includes('#') ? href.split('#')[1] : null;
+                })
+                .filter(id => id);
+
+            function activeScrollMenu() {
+                let current = '';
+                const scrollPos = window.scrollY;
+
+                sectionIds.forEach(id => {
+                    const section = document.getElementById(id);
+                    if (section) {
+                        const sectionTop = section.offsetTop;
+                        const sectionHeight = section.offsetHeight;
+                        
+                        if (scrollPos >= (sectionTop - 150) && scrollPos < (sectionTop + sectionHeight - 150)) {
+                            current = id;
+                        }
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if (current && href.endsWith('#' + current)) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', activeScrollMenu);
+            activeScrollMenu();
+
+            // ── MUSIC WIDGET (VIBE) ───
             const vibeAudio = document.getElementById('vibe-audio');
             const vibeWidget = document.getElementById('vibe-widget');
             const vibeCollapsed = document.getElementById('vibe-collapsed');
@@ -720,7 +509,7 @@
             const vibeCollapseBtn = document.getElementById('vibe-collapse-btn');
             const vibeWaves = document.getElementById('vibe-waves');
 
-            let isExpanded = false;
+            let isExpandedVibe = false;
 
             if (vibeAudio && vibeWidget) {
                 vibeAudio.volume = 0.4;
@@ -731,8 +520,8 @@
                 }
 
                 function expandWidget() {
-                    isExpanded = true;
-                    vibeWidget.classList.remove('vibe-breathe', 'w-12'); 
+                    isExpandedVibe = true;
+                    vibeWidget.classList.remove('vibe-breathe', 'w-14'); 
                     vibeWidget.classList.add('w-60'); 
                     
                     vibeCollapsed.classList.add('opacity-0');
@@ -747,18 +536,18 @@
                 }
 
                 function collapseWidget() {
-                    isExpanded = false;
+                    isExpandedVibe = false;
                     vibeExpanded.classList.add('opacity-0');
                     
                     vibeWidget.classList.remove('w-60');
-                    vibeWidget.classList.add('w-12');
+                    vibeWidget.classList.add('w-14');
                     
                     setTimeout(() => {
                         vibeExpanded.classList.add('hidden');
                         vibeCollapsed.classList.remove('hidden');
                         vibeWidget.classList.add('vibe-breathe'); 
                         setTimeout(() => vibeCollapsed.classList.remove('opacity-0'), 20);
-                    }, 200);
+                    }, 300);
                     
                     sessionStorage.setItem('vibeExpanded', 'false');
                 }
@@ -796,7 +585,7 @@
                 }
 
                 vibeWidget.addEventListener('click', (e) => {
-                    if (!isExpanded) {
+                    if (!isExpandedVibe) {
                         expandWidget();
                         if (vibeAudio.paused) {
                             vibeAudio.play().then(_ => setPlayingUI()).catch(e => setPausedUI());
@@ -826,142 +615,12 @@
                     const minutes = Math.floor(remainingTime / 60);
                     const seconds = remainingTime % 60;
                     vibeTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
                     sessionStorage.setItem('vibeCurrentTime', vibeAudio.currentTime);
                 }
                 
                 vibeAudio.addEventListener('loadedmetadata', updateTimer);
                 vibeAudio.addEventListener('timeupdate', updateTimer);
             }
-
-            // ── SCROLL SPY ──────────────────────────────────────────
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('body[id], section[id], div[id]'); 
-
-            function activeScrollMenu() {
-                let current = '';
-                const scrollPos = window.scrollY;
-                sections.forEach(section => {
-                    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-                    const sectionHeight = section.offsetHeight;
-                    if (scrollPos >= (sectionTop - 150) && scrollPos < (sectionTop + sectionHeight - 150)) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    const href = link.getAttribute('href');
-                    if (current && href.endsWith('#' + current)) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-            window.addEventListener('scroll', activeScrollMenu);
-            activeScrollMenu();
-
-            // ── WHATSAPP POPUP ───────────────────────────────────────
-            const whatsappBtn   = document.getElementById('whatsappButton');
-            const whatsappPopup = document.getElementById('whatsappPopup');
-            const closeBtn      = document.getElementById('closePopup');
-
-            if (whatsappBtn && whatsappPopup && closeBtn) {
-                whatsappBtn.addEventListener('click', (e) => { e.stopPropagation(); whatsappPopup.classList.toggle('active'); });
-                closeBtn.addEventListener('click', (e) => { e.stopPropagation(); whatsappPopup.classList.remove('active'); });
-                whatsappPopup.addEventListener('click', (e) => e.stopPropagation());
-                document.addEventListener('click', () => whatsappPopup.classList.remove('active'));
-            }
-        });
-
-        // ── MOBILE MENU ──────────────────────────────────────────────
-        const btn  = document.getElementById('mobile-menu-button');
-        const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-        menu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => menu.classList.add('hidden'));
-        });
-
-        // ── DARK MODE ────────────────────────────────────────────────
-        const themeToggleDarkIcon  = document.getElementById('theme-toggle-dark-icon');
-        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-
-        if (document.documentElement.classList.contains('dark')) {
-            themeToggleLightIcon.classList.remove('hidden');
-        } else {
-            themeToggleDarkIcon.classList.remove('hidden');
-        }
-
-        document.getElementById('theme-toggle').addEventListener('click', function() {
-            themeToggleDarkIcon.classList.toggle('hidden');
-            themeToggleLightIcon.classList.toggle('hidden');
-            if (localStorage.getItem('color-theme') === 'light') {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('color-theme', 'dark');
-            } else if (localStorage.getItem('color-theme') === 'dark') {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('color-theme', 'light');
-            } else {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                }
-            }
-        });
-
-        // ── SCROLL TO TOP ────────────────────────────────────────────
-        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) {
-                scrollToTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-4');
-                scrollToTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
-            } else {
-                scrollToTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-4');
-                scrollToTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
-            }
-        });
-        scrollToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-        // ── PWA INSTALLATION LOGIC ──────────────────────────────────
-        let deferredPrompt;
-        const installBtn = document.getElementById('pwa-install-btn');
-
-        // Hii event inatokea kama browser imeona website ina vigezo vya kuwa App
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Zuia browser isilete ile popup yake ya kawaida chini
-            e.preventDefault();
-            // Hifadhi event ili tuitumie mteja akibonyeza button yetu
-            deferredPrompt = e;
-            // Onyesha button yetu nzuri (toa class ya 'hidden')
-            installBtn.classList.remove('hidden');
-        });
-
-        // Mteja akibonyeza button yetu
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt !== null) {
-                // Onyesha popup ya simu (mfano: Install "Kigongoni Gazella"?)
-                deferredPrompt.prompt();
-                
-                // Subiri mteja achague 'Install' au 'Cancel'
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('Mteja amekubali ku-install App');
-                } else {
-                    console.log('Mteja ameahirisha');
-                }
-                
-                // Futa event, inatumika mara moja tu
-                deferredPrompt = null;
-                // Ficha button
-                installBtn.classList.add('hidden');
-            }
-        });
-
-        // Kama mteja amesha-install, ficha button moja kwa moja
-        window.addEventListener('appinstalled', () => {
-            installBtn.classList.add('hidden');
-            console.log('Kigongoni App imewekwa kikamilifu!');
         });
     </script>
 

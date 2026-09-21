@@ -363,18 +363,18 @@
         </div>
     </section>
 
-    {{-- ============================================================
+{{-- ============================================================
          ACCOMMODATION SECTION
     ============================================================ --}}
     <section id="rooms" class="py-24 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300 scroll-mt-20">
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto px-4 max-w-7xl">
             <div class="text-center mb-16" data-aos="fade-up">
                 <h3 class="text-kigongoniOrange font-bold tracking-[0.2em] uppercase mb-2 text-sm">Accommodation</h3>
                 <h2 class="text-4xl font-black text-kigongoniBlue dark:text-white uppercase tracking-tight">Our Elegant Rooms</h2>
                 <div class="w-24 h-1.5 bg-kigongoniOrange mx-auto mt-6 rounded-full"></div>
             </div>
 
-            {{-- Selected dates summary bar (shown after user selects dates) --}}
+            {{-- Selected dates summary bar --}}
             <div id="dates-summary-bar" class="hidden mb-10 bg-kigongoniBlue/5 dark:bg-kigongoniBlue/20 border border-kigongoniBlue/20 dark:border-kigongoniBlue/40 rounded-xl px-6 py-4 flex flex-wrap items-center justify-between gap-4" data-aos="fade-up">
                 <div class="flex flex-wrap items-center gap-6">
                     <div class="flex items-center gap-2">
@@ -404,100 +404,300 @@
                 </a>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {{-- THE ROOM CARDS --}}
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
 
                 {{-- STANDARD DOUBLE ROOM --}}
                 <div id="room-double" class="room-card relative bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden group hover:shadow-2xl transition duration-500 border border-gray-100 dark:border-gray-700" data-aos="fade-up" data-aos-delay="100">
-                    {{-- RECOMMENDED BADGE --}}
-                    <div id="badge-double" class="recommended-badge hidden absolute inset-0 z-20 pointer-events-none rounded-xl"
-                         style="box-shadow: 0 0 0 3px #ef4a25, 0 0 30px rgba(239,74,37,0.35); background: transparent;">
-                        <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-xs uppercase tracking-widest shadow-2xl"
-                             style="background: rgba(239,74,37,0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); white-space: nowrap;">
-                            <svg class="w-3.5 h-3.5 text-yellow-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            ✦ Recommended for You
+                    <div id="badge-double" class="recommended-badge hidden absolute inset-0 z-20 pointer-events-none rounded-xl" style="box-shadow: 0 0 0 3px #ef4a25, 0 0 30px rgba(239,74,37,0.35); background: transparent;">
+                        <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-xs uppercase tracking-widest shadow-2xl" style="background: rgba(239,74,37,0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); white-space: nowrap;">
+                            <svg class="w-3.5 h-3.5 text-yellow-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ✦ Recommended for You
                         </div>
                     </div>
                     <div class="relative overflow-hidden h-64">
-                        <img src="{{ asset('images/rooms/double-room.jpg') }}"
-                             alt="Standard Double Room"
-                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <img src="{{ asset('images/rooms/double-room.jpg') }}" alt="Standard Double Room" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                         <div class="absolute top-4 right-4 bg-kigongoniBlue/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg font-black text-lg shadow-lg">
-                            $50 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Per Night</span>
+                            $50 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Low Season (B&B)</span>
                         </div>
                     </div>
                     <div class="p-8 flex flex-col h-[calc(100%-256px)]">
                         <h4 class="text-xl font-black text-kigongoniBlue dark:text-white mb-3 uppercase tracking-wide">Standard Double Room</h4>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed flex-1">A peaceful retreat for couples or solo travelers. Featuring a cozy double bed, en-suite hot shower, air conditioning, complimentary Wi-Fi, and a hearty breakfast every morning — everything you need after a thrilling day on safari.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed flex-1">A peaceful retreat for couples or solo travelers. Featuring a cozy double bed, en-suite hot shower, air conditioning, complimentary Wi-Fi, and a hearty breakfast every morning.</p>
                         <div class="mt-6 pt-5 border-t border-gray-100 dark:border-gray-700">
-                            <a href="{{ route('rooms.standard-double') }}"
-                               class="room-btn room-link block text-center font-black py-4 rounded-xl border-2 uppercase tracking-widest text-xs transition-all duration-300"
-                               data-room="standard-double">View Room</a>
+                            <a href="{{ route('rooms.standard-double') }}" class="room-btn room-link block text-center font-black py-4 rounded-xl border-2 uppercase tracking-widest text-xs transition-all duration-300" data-room="standard-double">Select Room & Meals</a>
                         </div>
                     </div>
                 </div>
 
                 {{-- STANDARD TRIPLE ROOM --}}
                 <div id="room-triple" class="room-card relative bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden group hover:shadow-2xl transition duration-500 border border-gray-100 dark:border-gray-700" data-aos="fade-up" data-aos-delay="200">
-                    {{-- RECOMMENDED BADGE --}}
-                    <div id="badge-triple" class="recommended-badge hidden absolute inset-0 z-20 pointer-events-none rounded-xl"
-                         style="box-shadow: 0 0 0 3px #ef4a25, 0 0 30px rgba(239,74,37,0.35); background: transparent;">
-                        <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-xs uppercase tracking-widest shadow-2xl"
-                             style="background: rgba(239,74,37,0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); white-space: nowrap;">
-                            <svg class="w-3.5 h-3.5 text-yellow-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            ✦ Recommended for You
+                    <div id="badge-triple" class="recommended-badge hidden absolute inset-0 z-20 pointer-events-none rounded-xl" style="box-shadow: 0 0 0 3px #ef4a25, 0 0 30px rgba(239,74,37,0.35); background: transparent;">
+                        <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-xs uppercase tracking-widest shadow-2xl" style="background: rgba(239,74,37,0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); white-space: nowrap;">
+                            <svg class="w-3.5 h-3.5 text-yellow-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ✦ Recommended for You
                         </div>
                     </div>
                     <div class="relative overflow-hidden h-64">
-                        <img src="{{ asset('images/rooms/triple-room.jpg') }}"
-                             alt="Standard Triple Room"
-                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <img src="{{ asset('images/rooms/triple-room.jpg') }}" alt="Standard Triple Room" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                         <div class="absolute top-4 right-4 bg-kigongoniBlue/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg font-black text-lg shadow-lg">
-                            $80 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Per Night</span>
+                            $80 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Low Season (B&B)</span>
                         </div>
                     </div>
                     <div class="p-8 flex flex-col h-[calc(100%-256px)]">
                         <h4 class="text-xl font-black text-kigongoniBlue dark:text-white mb-3 uppercase tracking-wide">Standard Triple Room</h4>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed flex-1">Thoughtfully designed for groups of three, this spacious room combines one double bed and one single bed. Enjoy the same premium comfort — A/C, Wi-Fi, hot shower, and breakfast — with room for everyone to unwind.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed flex-1">Thoughtfully designed for groups of three, this spacious room combines one double bed and one single bed. Enjoy the same premium comfort with room for everyone.</p>
                         <div class="mt-6 pt-5 border-t border-gray-100 dark:border-gray-700">
-                            <a href="{{ route('rooms.standard-triple') }}"
-                               class="room-btn room-link block text-center font-black py-4 rounded-xl border-2 uppercase tracking-widest text-xs transition-all duration-300"
-                               data-room="standard-triple">View Room</a>
+                            <a href="{{ route('rooms.standard-triple') }}" class="room-btn room-link block text-center font-black py-4 rounded-xl border-2 uppercase tracking-widest text-xs transition-all duration-300" data-room="standard-triple">Select Room & Meals</a>
                         </div>
                     </div>
                 </div>
 
                 {{-- STANDARD FAMILY ROOM --}}
                 <div id="room-family" class="room-card relative bg-white dark:bg-gray-900 rounded-xl shadow-md overflow-hidden group hover:shadow-2xl transition duration-500 border border-gray-100 dark:border-gray-700" data-aos="fade-up" data-aos-delay="300">
-                    {{-- RECOMMENDED BADGE --}}
-                    <div id="badge-family" class="recommended-badge hidden absolute inset-0 z-20 pointer-events-none rounded-xl"
-                         style="box-shadow: 0 0 0 3px #ef4a25, 0 0 30px rgba(239,74,37,0.35); background: transparent;">
-                        <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-xs uppercase tracking-widest shadow-2xl"
-                             style="background: rgba(239,74,37,0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); white-space: nowrap;">
-                            <svg class="w-3.5 h-3.5 text-yellow-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            ✦ Recommended for You
+                    <div id="badge-family" class="recommended-badge hidden absolute inset-0 z-20 pointer-events-none rounded-xl" style="box-shadow: 0 0 0 3px #ef4a25, 0 0 30px rgba(239,74,37,0.35); background: transparent;">
+                        <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full font-black text-white text-xs uppercase tracking-widest shadow-2xl" style="background: rgba(239,74,37,0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); white-space: nowrap;">
+                            <svg class="w-3.5 h-3.5 text-yellow-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ✦ Recommended for You
                         </div>
                     </div>
                     <div class="relative overflow-hidden h-64">
-                        <img src="{{ asset('images/rooms/family-room.jpg') }}"
-                             alt="Standard Family Room"
-                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <img src="{{ asset('images/rooms/family-room.jpg') }}" alt="Standard Family Room" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                         <div class="absolute top-4 right-4 bg-kigongoniBlue/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg font-black text-lg shadow-lg">
-                            $100 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Per Night</span>
+                            $100 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Low Season (B&B)</span>
                         </div>
                     </div>
                     <div class="p-8 flex flex-col h-[calc(100%-256px)]">
                         <h4 class="text-xl font-black text-kigongoniBlue dark:text-white mb-3 uppercase tracking-wide">Standard Family Room</h4>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed flex-1">Our most generous room, built for families of up to four. Two full double beds, a spacious ~45 m² layout, and all the comforts of home. The perfect base for families exploring the Serengeti, Ngorongoro, and Lake Manyara.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed flex-1">Our most generous room, built for families of up to four. Two full double beds, a spacious ~45 m² layout, and all the comforts of home.</p>
                         <div class="mt-6 pt-5 border-t border-gray-100 dark:border-gray-700">
-                            <a href="{{ route('rooms.standard-family') }}"
-                               class="room-btn room-link block text-center font-black py-4 rounded-xl border-2 uppercase tracking-widest text-xs transition-all duration-300"
-                               data-room="standard-family">View Room</a>
+                            <a href="{{ route('rooms.standard-family') }}" class="room-btn room-link block text-center font-black py-4 rounded-xl border-2 uppercase tracking-widest text-xs transition-all duration-300" data-room="standard-family">Select Room & Meals</a>
                         </div>
                     </div>
                 </div>
+            </div>
 
+            {{-- PRICING GUIDE TRIGGER BUTTON --}}
+            <div class="text-center" data-aos="fade-up">
+                <button type="button" onclick="openPricingModal()" class="inline-flex items-center justify-center gap-3 bg-kigongoniBlue text-white font-black px-8 py-4 rounded-xl hover:bg-kigongoniOrange transition duration-300 uppercase tracking-widest text-sm shadow-xl group">
+                    <svg class="w-5 h-5 text-kigongoniOrange group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    View All Rates & Seasonal Offers
+                </button>
+            </div>
+
+        </div>
+
+        {{-- ============================================================
+             PRICING MODAL (CLASSIC DESIGN WITH STICKY HEADERS)
+        ============================================================ --}}
+        <div id="pricing-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 md:p-6 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="closePricingModal(event)">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative transform scale-95 transition-transform duration-300 overflow-hidden" id="pricing-modal-content">
+                
+                {{-- Modal Header --}}
+                <div class="bg-kigongoniBlue p-6 flex items-center justify-between z-40 shrink-0 border-b border-white/10 relative">
+                    <div>
+                        <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-wider">Accommodation Rates</h3>
+                        <p class="text-kigongoniOrange text-[11px] md:text-xs font-bold uppercase tracking-widest mt-1">All Prices are in USD ($) Per Night</p>
+                    </div>
+                    <button type="button" onclick="closePricingModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-kigongoniOrange flex items-center justify-center text-white transition duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                
+                {{-- Modal Body (Scrollable area) --}}
+                <div class="overflow-y-auto w-full bg-gray-50 dark:bg-gray-800 relative h-full">
+                    <div class="p-4 md:p-8">
+                        
+                        {{-- DESKTOP VIEW (CLASSIC TABLE) - Hidden on mobile --}}
+                        <div class="hidden md:block bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                            <table class="w-full text-sm text-left border-separate" style="border-spacing: 0;">
+                                <thead class="sticky top-0 z-30 drop-shadow-md">
+                                    <tr>
+                                        <th class="p-5 font-black text-gray-700 dark:text-gray-300 uppercase tracking-wider w-1/4 bg-gray-100 dark:bg-gray-800 border-b-2 border-gray-300 dark:border-gray-600 rounded-tl-xl">
+                                            Room & Meal Plan
+                                        </th>
+                                        <th class="p-5 font-black text-center border-l border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 border-b-2">
+                                            <div class="text-blue-600 dark:text-blue-400 uppercase tracking-wider text-base">Low Season</div>
+                                            <div class="text-[10px] text-gray-500 dark:text-gray-400 font-normal mt-1 leading-relaxed capitalize">Jan 15 - Jan 31, Mar, Apr, May,<br>Sep, Oct and Nov</div>
+                                        </th>
+                                        <th class="p-5 font-black text-center border-l border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 border-b-2 rounded-tr-xl">
+                                            <div class="text-kigongoniOrange uppercase tracking-wider text-base">High Season</div>
+                                            <div class="text-[10px] text-gray-500 dark:text-gray-400 font-normal mt-1 leading-relaxed capitalize">June, July, Aug,<br>Dec 15 - Jan 14, Feb</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{-- Double Room --}}
+                                    <tr class="bg-gray-50/50 dark:bg-gray-800/30">
+                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Double <span class="text-xs text-gray-400 font-normal normal-case ml-2">(Max 2 Guests)</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Bed & Breakfast (BB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$50</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$80</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Half Board (HB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$60</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$85</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Full Board (FB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$70</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$95</td>
+                                    </tr>
+                                    
+                                    {{-- Triple Room --}}
+                                    <tr class="bg-gray-50/50 dark:bg-gray-800/30">
+                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Triple <span class="text-xs text-gray-400 font-normal normal-case ml-2">(Max 3 Guests)</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Bed & Breakfast (BB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$80</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$110</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Half Board (HB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$95</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$120</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Full Board (FB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$110</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$125</td>
+                                    </tr>
+
+                                    {{-- Family Room --}}
+                                    <tr class="bg-gray-50/50 dark:bg-gray-800/30">
+                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Family <span class="text-xs text-gray-400 font-normal normal-case ml-2">(Max 4 Guests)</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Bed & Breakfast (BB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$100</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$140</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Half Board (HB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$120</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$150</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Full Board (FB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-gray-100 dark:border-gray-800 rounded-bl-xl">$140</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-gray-100 dark:border-gray-800 rounded-br-xl">$160</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- MOBILE VIEW (CARDS) - Shown only on mobile --}}
+                        <div class="md:hidden">
+                            {{-- Season Dates Guide for Mobile --}}
+                            <div class="mb-6 grid gap-3">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-xl border border-blue-100 dark:border-blue-800">
+                                    <span class="font-black text-blue-600 dark:text-blue-400 uppercase text-xs block mb-1">Low Season Dates:</span>
+                                    <span class="text-xs text-gray-600 dark:text-gray-300 leading-tight block">Jan 15 - Jan 31, Mar, Apr, May, Sep, Oct and Nov</span>
+                                </div>
+                                <div class="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-xl border border-orange-100 dark:border-orange-800">
+                                    <span class="font-black text-kigongoniOrange uppercase text-xs block mb-1">High Season Dates:</span>
+                                    <span class="text-xs text-gray-600 dark:text-gray-300 leading-tight block">June, July, Aug, Dec 15 - Jan 14, Feb</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                @foreach([
+                                    ['name' => 'Standard Double', 'max' => 2, 'prices' => [['Bed & Breakfast (BB)', 50, 80], ['Half Board (HB)', 60, 85], ['Full Board (FB)', 70, 95]]],
+                                    ['name' => 'Standard Triple', 'max' => 3, 'prices' => [['Bed & Breakfast (BB)', 80, 110], ['Half Board (HB)', 95, 120], ['Full Board (FB)', 110, 125]]],
+                                    ['name' => 'Standard Family', 'max' => 4, 'prices' => [['Bed & Breakfast (BB)', 100, 140], ['Half Board (HB)', 120, 150], ['Full Board (FB)', 140, 160]]],
+                                ] as $room)
+                                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                    <div class="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                                        <h4 class="font-black text-gray-800 dark:text-gray-200 uppercase tracking-wide text-sm">{{ $room['name'] }}</h4>
+                                        <span class="text-[9px] bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600 font-bold text-gray-500 dark:text-gray-300 uppercase">Max {{ $room['max'] }}</span>
+                                    </div>
+                                    <div class="p-0">
+                                        <div class="grid grid-cols-3 bg-white dark:bg-gray-900 text-[10px] font-bold text-gray-400 uppercase tracking-wider p-2 border-b border-gray-100 dark:border-gray-800 text-center">
+                                            <div>Plan</div>
+                                            <div class="text-blue-600 dark:text-blue-400">Low Season</div>
+                                            <div class="text-kigongoniOrange">High Season</div>
+                                        </div>
+                                        @foreach($room['prices'] as $price)
+                                        <div class="grid grid-cols-3 text-center border-b border-gray-50 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition">
+                                            {{-- Adjusted text size to ensure "Bed & Breakfast" fits well on mobile --}}
+                                            <div class="p-2 sm:p-3 font-bold text-[9px] sm:text-xs text-gray-600 dark:text-gray-300 uppercase flex items-center justify-center leading-tight">{{ $price[0] }}</div>
+                                            <div class="p-2 sm:p-3 font-black text-gray-800 dark:text-gray-200 flex items-center justify-center">${{ $price[1] }}</div>
+                                            <div class="p-2 sm:p-3 font-black text-gray-800 dark:text-gray-200 flex items-center justify-center">${{ $price[2] }}</div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {{-- Modal Footer / Quick Contact Buttons --}}
+                <div class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-5 md:px-8 shrink-0 relative z-40">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-center sm:text-left">Ready to book or need help?</p>
+                        <div class="flex w-full sm:w-auto gap-3">
+                            <a href="https://wa.me/255768219703?text={{ urlencode(__('Hello, I would like to inquire about room rates and meal plans at Kigongoni Gazella Hotel.')) }}" target="_blank"
+                               class="flex-1 flex items-center justify-center gap-2 bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400 font-black px-6 py-3 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/40 transition duration-300 uppercase tracking-widest text-[10px] border border-green-200 dark:border-green-800">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.507 3.933 1.395 5.61L.057 23.882l6.396-1.315A11.949 11.949 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.784 9.784 0 01-5.031-1.388l-.361-.214-3.735.768.793-3.635-.235-.374A9.773 9.773 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+                                WhatsApp
+                            </a>
+                            <button type="button" onclick="closePricingModal()" class="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-black px-6 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 uppercase tracking-widest text-[10px] border border-gray-200 dark:border-gray-700">
+                                Close Window
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        {{-- JAVASCRIPT FOR PRICING MODAL --}}
+        <script>
+            function openPricingModal() {
+                const modal = document.getElementById('pricing-modal');
+                const content = document.getElementById('pricing-modal-content');
+                
+                if (modal && content) {
+                    modal.classList.remove('hidden');
+                    setTimeout(() => {
+                        modal.classList.remove('opacity-0');
+                        content.classList.remove('scale-95');
+                        content.classList.add('scale-100');
+                    }, 10);
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            function closePricingModal(e) {
+                if (e && e.target.id !== 'pricing-modal') return;
+
+                const modal = document.getElementById('pricing-modal');
+                const content = document.getElementById('pricing-modal-content');
+
+                if (modal && content) {
+                    modal.classList.add('opacity-0');
+                    content.classList.remove('scale-100');
+                    content.classList.add('scale-95');
+
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    }, 300);
+                }
+            }
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === "Escape") {
+                    const modal = document.getElementById('pricing-modal');
+                    if (modal && !modal.classList.contains('hidden')) {
+                        closePricingModal();
+                    }
+                }
+            });
+        </script>
     </section>
 
     {{-- ============================================================

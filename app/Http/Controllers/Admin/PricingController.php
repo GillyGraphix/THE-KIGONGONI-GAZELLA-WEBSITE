@@ -25,15 +25,23 @@ class PricingController extends Controller
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file), true);
             if (is_array($data)) {
+                // Tunahakikisha meal_plans na standard_family zipo hata kama file ni la zamani
+                if (!isset($data['standard_family'])) {
+                    $data['standard_family'] = ['low' => 100, 'high' => 150];
+                }
+                if (!isset($data['meal_plans'])) {
+                    $data['meal_plans'] = ['hb' => 20, 'fb' => 40];
+                }
                 return $data;
             }
         }
 
-        // Bei za default kama file haipo bado
+        // Bei za default (Kama ulivyotolea mfano, Family Low = $100 ili siku 2 iwe $200. FB = $40)
         return [
             'standard_double' => ['low' => 50,  'high' => 80],
-            'standard_triple' => ['low' => 75,  'high' => 110],
-            'deluxe_suite'    => ['low' => 120, 'high' => 200],
+            'standard_triple' => ['low' => 80,  'high' => 110],
+            'standard_family' => ['low' => 100, 'high' => 140],
+            'meal_plans'      => ['hb' => 20,   'fb' => 40],
         ];
     }
 
@@ -51,13 +59,16 @@ class PricingController extends Controller
      */
     public function update(Request $request)
     {
+        // Tumeongeza validation za family room na meal plans
         $request->validate([
             'standard_double_low'  => 'required|numeric|min:0',
             'standard_double_high' => 'required|numeric|min:0',
             'standard_triple_low'  => 'required|numeric|min:0',
             'standard_triple_high' => 'required|numeric|min:0',
-            'deluxe_suite_low'     => 'required|numeric|min:0',
-            'deluxe_suite_high'    => 'required|numeric|min:0',
+            'standard_family_low'  => 'required|numeric|min:0',
+            'standard_family_high' => 'required|numeric|min:0',
+            'hb_price'             => 'required|numeric|min:0',
+            'fb_price'             => 'required|numeric|min:0',
         ]);
 
         $pricing = [
@@ -69,9 +80,13 @@ class PricingController extends Controller
                 'low'  => (int) $request->input('standard_triple_low'),
                 'high' => (int) $request->input('standard_triple_high'),
             ],
-            'deluxe_suite' => [
-                'low'  => (int) $request->input('deluxe_suite_low'),
-                'high' => (int) $request->input('deluxe_suite_high'),
+            'standard_family' => [
+                'low'  => (int) $request->input('standard_family_low'),
+                'high' => (int) $request->input('standard_family_high'),
+            ],
+            'meal_plans' => [
+                'hb'  => (int) $request->input('hb_price'),
+                'fb'  => (int) $request->input('fb_price'),
             ],
         ];
 

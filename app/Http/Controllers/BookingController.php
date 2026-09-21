@@ -10,31 +10,53 @@ use App\Mail\BookingGuestMail;
 
 class BookingController extends Controller
 {
+    /**
+     * Matrix ya bei kulingana na picha uliyotuma (Tunatumia RR - Rack Rates kwa website)
+     */
+    private function getPricingMatrix(): array
+    {
+        return [
+            'low' => [
+                1 => ['BB' => 50,  'HB' => 60,  'FB' => 70],   // Standard Double
+                2 => ['BB' => 80,  'HB' => 95,  'FB' => 110],  // Standard Triple
+                3 => ['BB' => 100, 'HB' => 120, 'FB' => 140],  // Standard Family
+            ],
+            'high' => [
+                1 => ['BB' => 80,  'HB' => 85,  'FB' => 95],   // Standard Double
+                2 => ['BB' => 110, 'HB' => 120, 'FB' => 125],  // Standard Triple
+                3 => ['BB' => 140, 'HB' => 150, 'FB' => 160],  // Standard Family
+            ]
+        ];
+    }
+
     private function getRooms()
     {
+        // Kwa ajili ya ku-display bei za msingi (BB) kwenye page ya vyumba
+        $matrix = $this->getPricingMatrix();
+
         return [
             1 => [
                 'id'         => 1,
                 'name'       => 'Standard Double Room',
                 'image'      => asset('images/rooms/standard-double/main.jpg'),
-                'low_price'  => 50,
-                'high_price' => 75,
+                'low_price'  => $matrix['low'][1]['BB'],
+                'high_price' => $matrix['high'][1]['BB'],
                 'features'   => '1 Queen/King Bed • Free Wi-Fi • Hot Shower • Breakfast Included',
             ],
             2 => [
                 'id'         => 2,
                 'name'       => 'Standard Triple Room',
                 'image'      => asset('images/rooms/standard-triple/main.jpg'),
-                'low_price'  => 80,
-                'high_price' => 110,
+                'low_price'  => $matrix['low'][2]['BB'],
+                'high_price' => $matrix['high'][2]['BB'],
                 'features'   => '1 Double & 1 Single Bed • Free Wi-Fi • En-suite Bathroom • Breakfast Included',
             ],
             3 => [
                 'id'         => 3,
                 'name'       => 'Standard Family Room',
                 'image'      => asset('images/rooms/standard-family/main.jpg'),
-                'low_price'  => 100,
-                'high_price' => 140,
+                'low_price'  => $matrix['low'][3]['BB'],
+                'high_price' => $matrix['high'][3]['BB'],
                 'features'   => '2 Double Beds • Free Wi-Fi • Spacious ~45 m² • Breakfast Included',
             ],
         ];
@@ -73,12 +95,14 @@ class BookingController extends Controller
         ]);
     }
 
-    public function checkout(Request $request, $room_id)
+    public function checkout(Request $request,int $room_id)
     {
         $request->validate([
-            'checkin'  => 'required|string',
-            'checkout' => 'required|string',
-            'guests'   => 'required|string',
+            'checkin'   => 'required|string',
+            'checkout'  => 'required|string',
+            'guests'    => 'required|string',
+            'meal_plan' => 'nullable|string|in:BB,HB,FB',
+            'meal_days' => 'nullable|integer|min:0',
         ]);
 
         $checkin  = Carbon::parse($request->checkin);
@@ -90,11 +114,30 @@ class BookingController extends Controller
             return redirect()->back()->with('error', 'Room not found.');
         }
 
-        $room       = $rooms[$room_id];
-        $totalPrice = 0;
+        $room   = $rooms[$room_id];
+        $matrix = $this->getPricingMatrix();
+
+        $mealPlan          = $request->input('meal_plan', 'BB');
+        $mealDaysRemaining = (int) $request->input('meal_days', 0);
+        
+        // Piga hesabu siku kwa siku kwa kutumia Matrix
+        $totalPrice  = 0;
         $currentDate = $checkin->copy();
+
         while ($currentDate->lt($checkout)) {
-            $totalPrice += $this->checkIfHighSeason($currentDate) ? $room['high_price'] : $room['low_price'];
+            $season = $this->checkIfHighSeason($currentDate) ? 'high' : 'low';
+            
+            // Angalia kama hii siku inastahili kuwa na HB au FB
+            $dailyMealPlan = 'BB';
+            if ($mealPlan !== 'BB' && $mealDaysRemaining > 0) {
+                $dailyMealPlan = $mealPlan;
+                $mealDaysRemaining--; // Punguza siku moja ya mlo
+            }
+
+            // Daka bei ya hiyo siku kutoka kwenye Matrix kulingana na (Msimu, Chumba, na Mlo)
+            $dailyPrice = $matrix[$season][$room_id][$dailyMealPlan];
+            $totalPrice += $dailyPrice;
+
             $currentDate->addDay();
         }
 
@@ -104,8 +147,10 @@ class BookingController extends Controller
             'checkin'     => $checkin->format('d M Y'),
             'checkout'    => $checkout->format('d M Y'),
             'nights'      => $nights,
-            'total_price' => $totalPrice,
             'guests'      => $request->guests,
+            'meal_plan'   => $mealPlan,
+            'meal_days'   => (int) $request->input('meal_days', 0),
+            'total_price' => $totalPrice,
         ]);
     }
 
@@ -122,20 +167,40 @@ class BookingController extends Controller
             'checkin'         => 'required|string',
             'checkout'        => 'required|string',
             'guests'          => 'required|string',
+            'meal_plan'       => 'nullable|string|in:BB,HB,FB',
+            'meal_days'       => 'nullable|integer|min:0',
             'total_price'     => 'required|numeric',
         ]);
 
-        // Pata jina la chumba
         $rooms    = $this->getRooms();
         $roomId   = (int) $validated['room_id'];
         $roomName = isset($rooms[$roomId]) ? $rooms[$roomId]['name'] : 'Unknown Room';
 
-        // Hesabu usiku
         $checkinDate  = Carbon::parse($validated['checkin']);
         $checkoutDate = Carbon::parse($validated['checkout']);
         $nights       = $checkinDate->diffInDays($checkoutDate);
 
-        // Packaging ya data — itatumika kwenye email templates zote mbili
+        // Security check: Piga hesabu upya hapa hapa server-side ili mteja asi-cheat bei kupitia Inspect Element
+        $matrix            = $this->getPricingMatrix();
+        $mealPlan          = $validated['meal_plan'] ?? 'BB';
+        $mealDaysRemaining = $validated['meal_days'] ?? 0;
+        
+        $serverCalculatedPrice = 0;
+        $currentDate           = $checkinDate->copy();
+
+        while ($currentDate->lt($checkoutDate)) {
+            $season = $this->checkIfHighSeason($currentDate) ? 'high' : 'low';
+            $dailyMealPlan = 'BB';
+            
+            if ($mealPlan !== 'BB' && $mealDaysRemaining > 0) {
+                $dailyMealPlan = $mealPlan;
+                $mealDaysRemaining--;
+            }
+
+            $serverCalculatedPrice += $matrix[$season][$roomId][$dailyMealPlan];
+            $currentDate->addDay();
+        }
+
         $bookingData = [
             'first_name'      => $validated['first_name'],
             'last_name'       => $validated['last_name'],
@@ -148,19 +213,14 @@ class BookingController extends Controller
             'checkout'        => $validated['checkout'],
             'guests'          => $validated['guests'],
             'nights'          => $nights,
-            'total_price'     => $validated['total_price'],
+            'meal_plan'       => $mealPlan,
+            'meal_days'       => $validated['meal_days'] ?? 0,
+            'total_price'     => $serverCalculatedPrice, // Tunatumia bei halisi iliyohakikiwa na server
         ];
 
-        // ── Tuma email kwa HOTEL (wewe) ──────────────────────────
-        // Hapa nimeiweka moja kwa moja iende kwenye email mpya
-        Mail::to('booking@kigongonigazella.co.tz')
-            ->send(new BookingHotelMail($bookingData));
+        Mail::to('booking@kigongonigazella.co.tz')->send(new BookingHotelMail($bookingData));
+        Mail::to($validated['email'])->send(new BookingGuestMail($bookingData));
 
-        // ── Tuma email kwa MTEJA ─────────────────────────────────
-        Mail::to($validated['email'])
-            ->send(new BookingGuestMail($bookingData));
-
-        // ── Jibu ─────────────────────────────────────────────────
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true]);
         }
@@ -168,8 +228,30 @@ class BookingController extends Controller
         return redirect()->route('home')->with('success', 'Booking received!');
     }
 
-    private function checkIfHighSeason($date): bool
+    /**
+     * Kalenda ya Misimu (High vs Low)
+     */
+    private function checkIfHighSeason(\Carbon\Carbon $date): bool
     {
-        return $date->month >= 5 && $date->month <= 12;
+        $month = $date->month;
+        $day = $date->day;
+
+        // Miezi kamili ya High Season (Feb, Jun, Jul, Aug)
+        if (in_array($month, [2, 6, 7, 8])) {
+            return true;
+        }
+
+        // High Season kuanzia Dec 15 mpaka Dec 31
+        if ($month == 12 && $day >= 15) {
+            return true;
+        }
+
+        // High Season kuanzia Jan 1 mpaka Jan 14
+        if ($month == 1 && $day <= 14) {
+            return true;
+        }
+
+        // Tarehe na miezi iliyobaki yote ni Low Season
+        return false;
     }
 }

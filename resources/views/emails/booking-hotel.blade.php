@@ -25,12 +25,13 @@
         /* Section title */
         .section-title { font-size: 11px; font-weight: 800; color: #ef4a25; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #fce8e3; }
 
-        /* Info rows */
-        .info-block { background: #f9fafb; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; border: 1px solid #e5e7eb; }
-        .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
+        /* Info rows - MREKEBISHO YAPO HAPA */
+        .info-block { background: #f9fafb; border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid #e5e7eb; }
+        .info-row { display: flex; padding: 14px 0; border-bottom: 1px solid #e5e7eb; gap: 32px; } /* Gap kubwa ya kutosha kati ya title na jibu */
         .info-row:last-child { border-bottom: none; padding-bottom: 0; }
-        .info-label { font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; min-width: 130px; }
-        .info-value { font-size: 14px; font-weight: 700; color: #111827; text-align: right; }
+        .info-label { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; width: 130px; flex-shrink: 0; line-height: 1.5; }
+        .info-value { font-size: 15px; font-weight: 800; color: #111827; text-align: left; word-break: break-word; overflow-wrap: break-word; flex: 1; line-height: 1.5; }
+        .info-value a { color: #111827; text-decoration: none; }
         .info-value.highlight { color: #ef4a25; font-size: 16px; }
 
         /* Booking summary box */
@@ -40,6 +41,8 @@
         .booking-box .bitem-value { font-size: 14px; font-weight: 800; color: #ffffff; line-height: 1.3; }
         .booking-box .bitem-value.orange { color: #ef4a25; font-size: 22px; }
         .booking-divider { width: 1px; background: rgba(255,255,255,0.15); }
+        
+        .meal-badge { display: inline-block; background: #ef4a25; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 6px; }
 
         /* Special request */
         .special-box { background: #fffbf0; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; }
@@ -64,10 +67,42 @@
             .actions { flex-direction: column; }
             .booking-box .booking-grid { grid-template-columns: 1fr; }
             .booking-divider { display: none; }
+            
+            /* Responsive adjustments kwa info rows */
+            .info-row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 0; }
+            .info-label { width: 100%; font-size: 10px; }
+            .info-value { text-align: left; width: 100%; }
         }
     </style>
 </head>
 <body>
+
+@php
+    // Majina ya Meal Plans
+    $mealPlanNames = [
+        'BB' => 'Bed & Breakfast',
+        'HB' => 'Half Board',
+        'FB' => 'Full Board',
+    ];
+    $mealPlan = $booking['meal_plan'] ?? 'BB';
+    $displayMealName = $mealPlanNames[$mealPlan] ?? $mealPlan;
+    $mealDays = $booking['meal_days'] ?? 0;
+
+    // Kutambua Msimu (High/Low Season) kulingana na Check-In Date
+    $checkinDate = \Carbon\Carbon::parse($booking['checkin']);
+    $month = $checkinDate->month;
+    $day = $checkinDate->day;
+
+    $season = 'Low Season';
+    if (in_array($month, [2, 6, 7, 8])) {
+        $season = 'High Season';
+    } elseif ($month == 12 && $day >= 15) {
+        $season = 'High Season';
+    } elseif ($month == 1 && $day <= 14) {
+        $season = 'High Season';
+    }
+@endphp
+
 <div class="wrapper">
 
     {{-- HEADER --}}
@@ -102,7 +137,7 @@
             </div>
         </div>
 
-        {{-- DATES --}}
+        {{-- STAY DETAILS --}}
         <div class="info-block" style="margin-bottom: 24px;">
             <div class="info-row">
                 <span class="info-label">Check-In</span>
@@ -111,6 +146,19 @@
             <div class="info-row">
                 <span class="info-label">Check-Out</span>
                 <span class="info-value">{{ $booking['checkout'] }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Season</span>
+                <span class="info-value highlight">{{ $season }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Meal Plan</span>
+                <span class="info-value">
+                    {{ $displayMealName }}
+                    @if($mealPlan != 'BB' && $mealDays > 0)
+                        <span class="meal-badge">{{ $mealDays }} Day(s)</span>
+                    @endif
+                </span>
             </div>
             <div class="info-row">
                 <span class="info-label">Guests</span>
@@ -127,7 +175,7 @@
             </div>
             <div class="info-row">
                 <span class="info-label">Email</span>
-                <span class="info-value">{{ $booking['email'] }}</span>
+                <span class="info-value"><a href="mailto:{{ $booking['email'] }}">{{ $booking['email'] }}</a></span>
             </div>
             <div class="info-row">
                 <span class="info-label">Phone</span>

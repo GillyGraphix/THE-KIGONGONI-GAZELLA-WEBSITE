@@ -23,7 +23,7 @@
         'checkout'   => $checkout,
         'guests'     => $guests,
         'room_type'  => 'Standard Triple Room',
-        'room_price' => 80,
+        'room_price' => 75,
         'meal_plan'  => $mealPlan,
         'meal_days'  => $mealDays,
     ]);
@@ -125,7 +125,7 @@
                             <div id="inline-cal-grid" class="grid grid-cols-7 gap-1"></div>
                             <div class="flex gap-4 mt-3 px-1">
                                 <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500">
-                                    <span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $80+
+                                    <span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $75+
                                 </div>
                                 <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500">
                                     <span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $110+
@@ -288,7 +288,7 @@
                                 <p class="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] mb-0.5">{{ __('Starting From') }}</p>
                                 <div class="flex items-start gap-0.5">
                                     <span class="text-kigongoniOrange text-xl font-black mt-1.5">$</span>
-                                    <span id="price-display" class="text-white font-black leading-none drop-shadow-lg" style="font-size:64px;line-height:1;">80</span>
+                                    <span id="price-display" class="text-white font-black leading-none drop-shadow-lg" style="font-size:64px;line-height:1;">75</span>
                                 </div>
                                 <p class="text-white/40 text-[10px] uppercase tracking-widest font-bold mt-0.5">{{ __('Per Night · Incl. B&B') }}</p>
                             </div>
@@ -301,7 +301,7 @@
                         <div class="grid grid-cols-2 gap-2">
                             <div class="rounded-xl p-3" style="background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); backdrop-filter: blur(8px);">
                                 <div class="flex items-center gap-1.5 mb-1.5"><div class="w-2 h-2 rounded-full bg-blue-400"></div><p class="text-blue-300 text-[10px] font-black uppercase tracking-wide">{{ __('Low Season') }}</p></div>
-                                <p class="text-white font-black text-xl leading-none">$80</p>
+                                <p class="text-white font-black text-xl leading-none">$75</p>
                                 <p class="text-white/30 text-[8.5px] font-bold mt-0.5 leading-tight">Jan 15-31, Mar, Apr, May, Sep, Oct, Nov</p>
                             </div>
                             <div class="rounded-xl p-3" style="background: rgba(239,74,37,0.15); border: 1px solid rgba(239,74,37,0.4); backdrop-filter: blur(8px);">
@@ -350,10 +350,10 @@
                 <h2 class="text-xl font-black text-kigongoniBlue dark:text-white uppercase tracking-wide">{{ __('About This Room') }}</h2>
             </div>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base">
-                {{ __('The Standard Triple room at Kigongoni Gazella Hotel is a spacious, thoughtfully arranged retreat designed for small families or groups of three seeking comfort and togetherness after an exciting day in the wild. Nestled in the heart of Mto wa Mbu, this room combines a cozy double bed with a separate single bed — giving everyone their own comfortable space.') }}
+                {{ __('The Standard Triple room at Kigongoni Gazella Hotel is a spacious, thoughtfully arranged retreat designed for small families or groups of three seeking comfort and togetherness after an exciting day in the wild. Nestled in the heart of Mto wa Mbu, this room combines a cozy double bed with a separate single bed giving everyone their own comfortable space.') }}
             </p>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base mt-4">
-                {{ __('At approximately 35 m², there is ample room to relax, unpack, and feel at home. Whether you\'re a family exploring the Serengeti and Ngorongoro Crater, or friends on a safari adventure together, this room is your perfect base — comfortable, clean, and warm with Tanzanian hospitality.') }}
+                {{ __('At approximately 35 m², there is ample room to relax, unpack, and feel at home. Whether you\'re a family exploring the Serengeti and Ngorongoro Crater, or friends on a safari adventure together, this room is your perfect base comfortable, clean, and warm with Tanzanian hospitality.') }}
             </p>
         </div>
 
@@ -517,7 +517,7 @@
                         </div>
                         <div id="cal-grid" class="grid grid-cols-7 gap-0.5"></div>
                         <div class="flex gap-3 my-3 px-1">
-                            <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $80+</div>
+                            <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $75+</div>
                             <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $110+</div>
                             <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange inline-block"></span> {{ __('Selected') }}</div>
                         </div>
@@ -651,7 +651,7 @@
                     </div>
                     <div id="cal-grid-mob" class="grid grid-cols-7 gap-1 mb-4"></div>
                     <div class="flex flex-wrap gap-4 mb-4 px-1">
-                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $80+</div>
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniBlue/10 border border-kigongoniBlue/40 inline-block"></span> {{ __('Low') }} $75+</div>
                         <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange/20 border border-kigongoniOrange/50 inline-block"></span> {{ __('High') }} $110+</div>
                         <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-gray-400"><span class="w-3 h-3 rounded-sm bg-kigongoniOrange inline-block"></span> {{ __('Selected') }}</div>
                     </div>
@@ -747,8 +747,8 @@ const checkoutRoute = "{{ route('booking.checkout', 2) }}";
 
 // ─── Season & Meal Pricing ────────────────────────────────────
 const PRICES = {
-    low:  { BB: 80, HB: 95, FB: 110 },
-    high: { BB: 110, HB: 120, FB: 125 }
+    low:  { BB: 75, HB: 105, FB: 135 },
+    high: { BB: 110, HB: 140, FB: 170 }
 };
 
 let currentMealPlan = "{{ $mealPlan }}";

@@ -347,7 +347,7 @@
                 </div>
                 <h2 class="text-4xl md:text-5xl font-black text-kigongoniBlue dark:text-white mb-6 leading-tight uppercase tracking-tight">Your Ultimate Safari Gateway</h2>
                 <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed text-lg">
-                    Experience the perfect blend of authentic Tanzanian hospitality and modern comfort at Kigongoni Gazella Hotel in Mto wa Mbu. Whether you are gearing up for a thrilling Serengeti safari or unwinding after exploring the Ngorongoro Crater, our serene environment is your ultimate gateway. Enjoy exquisite local cuisine, relax in elegant rooms, and let our warm staff make your stay unforgettable. Book your sanctuary with us today and let your true safari journey begin.
+                    Experience authentic Tanzanian hospitality and modern comfort at Kigongoni Gazella Hotel, Mto wa Mbu. Perfectly located for your Serengeti or Ngorongoro adventure, we offer serene rooms, exquisite local cuisine, and warm service. Book your stay today.
                 </p>
                 <a href="#rooms" class="inline-flex items-center gap-2 border-2 border-kigongoniBlue dark:border-kigongoniOrange text-kigongoniBlue dark:text-kigongoniOrange font-bold py-3 px-8 rounded hover:bg-kigongoniBlue hover:text-white dark:hover:bg-kigongoniOrange dark:hover:text-white transition duration-300 shadow-sm uppercase text-sm tracking-wider">
                     Discover More
@@ -439,7 +439,7 @@
                     <div class="relative overflow-hidden h-64">
                         <img src="{{ asset('images/rooms/triple-room.jpg') }}" alt="Standard Triple Room" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                         <div class="absolute top-4 right-4 bg-kigongoniBlue/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg font-black text-lg shadow-lg">
-                            $80 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Low Season (B&B)</span>
+                            $75 <span class="text-[11px] font-semibold uppercase tracking-wider block text-center -mt-1 text-kigongoniOrange">Low Season (B&B)</span>
                         </div>
                     </div>
                     <div class="p-8 flex flex-col h-[calc(100%-256px)]">
@@ -515,73 +515,73 @@
                                         </th>
                                         <th class="p-5 font-black text-center border-l border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 border-b-2">
                                             <div class="text-blue-600 dark:text-blue-400 uppercase tracking-wider text-base">Low Season</div>
-                                            <div class="text-[10px] text-gray-500 dark:text-gray-400 font-normal mt-1 leading-relaxed capitalize">Jan 15 - Jan 31, Mar, Apr, May,<br>Sep, Oct and Nov</div>
+                                            <div class="text-[10px] text-gray-900 dark:text-gray-100 font-normal mt-1 leading-relaxed capitalize">Jan 15 - Jan 31, Mar, Apr, May,<br>Sep, Oct and Nov</div>
                                         </th>
                                         <th class="p-5 font-black text-center border-l border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 border-b-2 rounded-tr-xl">
                                             <div class="text-kigongoniOrange uppercase tracking-wider text-base">High Season</div>
-                                            <div class="text-[10px] text-gray-500 dark:text-gray-400 font-normal mt-1 leading-relaxed capitalize">June, July, Aug,<br>Dec 15 - Jan 14, Feb</div>
+                                            <div class="text-[10px] text-gray-900 dark:text-gray-100 font-normal mt-1 leading-relaxed capitalize">June, July, Aug,<br>Dec 15 - Jan 14, Feb</div>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {{-- Double Room --}}
                                     <tr class="bg-gray-50/50 dark:bg-gray-800/30">
-                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Double <span class="text-xs text-gray-400 font-normal normal-case ml-2">(Max 2 Guests)</span></td>
+                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Double <span class="text-xs text-gray-900 font-normal normal-case ml-2">(Max 2 Guests)</span></td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Bed & Breakfast (BB)</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Bed & Breakfast (BB)</td>
                                         <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$50</td>
                                         <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$80</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Half Board (HB)</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$60</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$85</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Half Board (HB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$70</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$100</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Full Board (FB)</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$70</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$95</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Full Board (FB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$90</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$120</td>
                                     </tr>
                                     
                                     {{-- Triple Room --}}
                                     <tr class="bg-gray-50/50 dark:bg-gray-800/30">
-                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Triple <span class="text-xs text-gray-400 font-normal normal-case ml-2">(Max 3 Guests)</span></td>
+                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Triple <span class="text-xs text-gray-900 font-normal normal-case ml-2">(Max 3 Guests)</span></td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Bed & Breakfast (BB)</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$80</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Bed & Breakfast (BB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$75</td>
                                         <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$110</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Half Board (HB)</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$95</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$120</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Half Board (HB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$105</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$140</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Full Board (FB)</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$110</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$125</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Full Board (FB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$135</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$170</td>
                                     </tr>
 
                                     {{-- Family Room --}}
                                     <tr class="bg-gray-50/50 dark:bg-gray-800/30">
-                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Family <span class="text-xs text-gray-400 font-normal normal-case ml-2">(Max 4 Guests)</span></td>
+                                        <td class="p-4 font-black text-kigongoniBlue dark:text-white uppercase tracking-wider text-base" colspan="3">Standard Family <span class="text-xs text-gray-900 font-normal normal-case ml-2">(Max 4 Guests)</span></td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Bed & Breakfast (BB)</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Bed & Breakfast (BB)</td>
                                         <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$100</td>
                                         <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$140</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Half Board (HB)</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$120</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$150</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2 border-b border-gray-100 dark:border-gray-800"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Half Board (HB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$140</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-b border-gray-100 dark:border-gray-800">$180</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div> Full Board (FB)</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-gray-100 dark:border-gray-800 rounded-bl-xl">$140</td>
-                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-gray-100 dark:border-gray-800 rounded-br-xl">$160</td>
+                                        <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-bold text-xs uppercase flex items-center gap-2"><div class="w-2.5 h-1.5 rounded-full bg-gray-500"></div> Full Board (FB)</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-gray-100 dark:border-gray-800 rounded-bl-xl">$180</td>
+                                        <td class="px-6 py-4 text-center font-black text-gray-800 dark:text-gray-200 border-l border-gray-100 dark:border-gray-800 rounded-br-xl">$220</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -593,19 +593,19 @@
                             <div class="mb-6 grid gap-3">
                                 <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-xl border border-blue-100 dark:border-blue-800">
                                     <span class="font-black text-blue-600 dark:text-blue-400 uppercase text-xs block mb-1">Low Season Dates:</span>
-                                    <span class="text-xs text-gray-600 dark:text-gray-300 leading-tight block">Jan 15 - Jan 31, Mar, Apr, May, Sep, Oct and Nov</span>
+                                    <span class="text-xs text-gray-900 dark:text-gray-100 leading-tight block">Jan 15 - Jan 31, Mar, Apr, May, Sep, Oct and Nov</span>
                                 </div>
                                 <div class="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-xl border border-orange-100 dark:border-orange-800">
                                     <span class="font-black text-kigongoniOrange uppercase text-xs block mb-1">High Season Dates:</span>
-                                    <span class="text-xs text-gray-600 dark:text-gray-300 leading-tight block">June, July, Aug, Dec 15 - Jan 14, Feb</span>
+                                    <span class="text-xs text-gray-900 dark:text-gray-100 leading-tight block">June, July, Aug, Dec 15 - Jan 14, Feb</span>
                                 </div>
                             </div>
 
                             <div class="space-y-6">
                                 @foreach([
-                                    ['name' => 'Standard Double', 'max' => 2, 'prices' => [['Bed & Breakfast (BB)', 50, 80], ['Half Board (HB)', 60, 85], ['Full Board (FB)', 70, 95]]],
-                                    ['name' => 'Standard Triple', 'max' => 3, 'prices' => [['Bed & Breakfast (BB)', 80, 110], ['Half Board (HB)', 95, 120], ['Full Board (FB)', 110, 125]]],
-                                    ['name' => 'Standard Family', 'max' => 4, 'prices' => [['Bed & Breakfast (BB)', 100, 140], ['Half Board (HB)', 120, 150], ['Full Board (FB)', 140, 160]]],
+                                    ['name' => 'Standard Double', 'max' => 2, 'prices' => [['Bed & Breakfast (BB)', 50, 80], ['Half Board (HB)', 70, 100], ['Full Board (FB)', 90, 120]]],
+                                    ['name' => 'Standard Triple', 'max' => 3, 'prices' => [['Bed & Breakfast (BB)', 75, 110], ['Half Board (HB)', 105, 140], ['Full Board (FB)', 135, 170]]],
+                                    ['name' => 'Standard Family', 'max' => 4, 'prices' => [['Bed & Breakfast (BB)', 100, 140], ['Half Board (HB)', 140, 180], ['Full Board (FB)', 180, 220]]],
                                 ] as $room)
                                 <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                                     <div class="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">

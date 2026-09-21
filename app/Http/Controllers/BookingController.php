@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Mail\BookingHotelMail;
 use App\Mail\BookingGuestMail;
@@ -17,14 +18,14 @@ class BookingController extends Controller
     {
         return [
             'low' => [
-                1 => ['BB' => 50,  'HB' => 60,  'FB' => 70],   // Standard Double
-                2 => ['BB' => 80,  'HB' => 95,  'FB' => 110],  // Standard Triple
-                3 => ['BB' => 100, 'HB' => 120, 'FB' => 140],  // Standard Family
+                1 => ['BB' => 50,  'HB' => 70,  'FB' => 90],   // Standard Double
+                2 => ['BB' => 75,  'HB' => 105,  'FB' => 135],  // Standard Triple
+                3 => ['BB' => 100, 'HB' => 140, 'FB' => 180],  // Standard Family
             ],
             'high' => [
-                1 => ['BB' => 80,  'HB' => 85,  'FB' => 95],   // Standard Double
-                2 => ['BB' => 110, 'HB' => 120, 'FB' => 125],  // Standard Triple
-                3 => ['BB' => 140, 'HB' => 150, 'FB' => 160],  // Standard Family
+                1 => ['BB' => 80,  'HB' => 100,  'FB' => 120],   // Standard Double
+                2 => ['BB' => 110, 'HB' => 140, 'FB' => 170],  // Standard Triple
+                3 => ['BB' => 140, 'HB' => 180, 'FB' => 220],  // Standard Family
             ]
         ];
     }
@@ -95,7 +96,7 @@ class BookingController extends Controller
         ]);
     }
 
-    public function checkout(Request $request,int $room_id)
+    public function checkout(Request $request, int $room_id)
     {
         $request->validate([
             'checkin'   => 'required|string',
@@ -180,7 +181,7 @@ class BookingController extends Controller
         $checkoutDate = Carbon::parse($validated['checkout']);
         $nights       = $checkinDate->diffInDays($checkoutDate);
 
-        // Security check: Piga hesabu upya hapa hapa server-side ili mteja asi-cheat bei kupitia Inspect Element
+        // Security check: Piga hesabu upya hapa hapa server-side
         $matrix            = $this->getPricingMatrix();
         $mealPlan          = $validated['meal_plan'] ?? 'BB';
         $mealDaysRemaining = $validated['meal_days'] ?? 0;
@@ -215,11 +216,26 @@ class BookingController extends Controller
             'nights'          => $nights,
             'meal_plan'       => $mealPlan,
             'meal_days'       => $validated['meal_days'] ?? 0,
-            'total_price'     => $serverCalculatedPrice, // Tunatumia bei halisi iliyohakikiwa na server
+            'total_price'     => $serverCalculatedPrice, 
         ];
 
-        Mail::to('booking@kigongonigazella.co.tz')->send(new BookingHotelMail($bookingData));
-        Mail::to($validated['email'])->send(new BookingGuestMail($bookingData));
+        // Sehemu ya kudaka mchawi (Try-Catch Block)
+        try {
+            Mail::to('booking@kigongonigazella.co.tz')->send(new BookingHotelMail($bookingData));
+            Mail::to($validated['email'])->send(new BookingGuestMail($bookingData));
+        } catch (\Exception $e) {
+            // Rekodi error kwenye storage/logs/laravel.log
+            Log::error('SMTP Error wakati wa kutuma booking: ' . $e->getMessage());
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false, 
+                    'message' => 'Imeshindwa kutuma email. Error: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()->back()->with('error', 'Kuna tatizo la kiufundi kwenye kutuma email. Tafadhali wasiliana nasi moja kwa moja.');
+        }
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true]);

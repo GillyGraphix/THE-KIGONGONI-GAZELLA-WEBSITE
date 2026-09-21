@@ -351,10 +351,10 @@
                 <h2 class="text-xl font-black text-kigongoniBlue dark:text-white uppercase tracking-wide">{{ __('About This Room') }}</h2>
             </div>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base">
-                {{ __('The Standard Family Room at Kigongoni Gazella Hotel is our most spacious standard offering — a warm, generously sized retreat designed for families of up to four guests. Featuring two comfortable double beds, this room gives every family member their own space to relax after an unforgettable day on safari.') }}
+                {{ __('The Standard Family Room at Kigongoni Gazella Hotel is our most spacious standard offering a warm, generously sized retreat designed for families of up to four guests. Featuring two comfortable double beds, this room gives every family member their own space to relax after an unforgettable day on safari.') }}
             </p>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base mt-4">
-                {{ __('At approximately 45 m², there is plenty of room for everyone to unwind, unpack, and feel truly at home. Whether you are exploring the Serengeti, Lake Manyara, or the Ngorongoro Crater, this family room is your perfect Tanzanian home away from home — comfortable, welcoming, and full of warmth.') }}
+                {{ __('At approximately 45 m², there is plenty of room for everyone to unwind, unpack, and feel truly at home. Whether you are exploring the Serengeti, Lake Manyara, or the Ngorongoro Crater, this family room is your perfect Tanzanian home away from home comfortable, welcoming, and full of warmth.') }}
             </p>
         </div>
 
@@ -751,8 +751,8 @@ const checkoutRoute = "{{ route('booking.checkout', 3) }}"; // Route ID 3 kwa Fa
 // ─── Season & Meal Pricing ────────────────────────────────────
 // HB Add-on for family: $60, FB Add-on: $120. (Added on top of BB price)
 const PRICES = {
-    low:  { BB: 100, HB: 120, FB: 140 },
-    high: { BB: 140, HB: 150, FB: 160 }
+    low:  { BB: 100, HB: 140, FB: 180 },
+    high: { BB: 140, HB: 180, FB: 220 }
 };
 
 let currentMealPlan = "{{ $mealPlan }}";

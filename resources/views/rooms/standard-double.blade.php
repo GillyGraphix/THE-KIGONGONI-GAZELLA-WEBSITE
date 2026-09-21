@@ -402,10 +402,10 @@
                 <h2 class="text-xl font-black text-kigongoniBlue dark:text-white uppercase tracking-wide">{{ __('About This Room') }}</h2>
             </div>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base">
-                {{ __('The Standard Double room at Kigongoni Gazella Hotel is a cozy, well-appointed retreat designed for couples or solo travelers seeking comfort after an exciting day in the wild. Nestled in the heart of Mto wa Mbu, this room offers a peaceful environment with all the essentials for a memorable stay.') }}
+                {{ __('The Standard Double room at Kigongoni Gazella Hotel is a cozy, well appointed retreat designed for couples or solo travelers seeking comfort after an exciting day in the wild. Nestled in the heart of Mto wa Mbu, this room offers a peaceful environment with all the essentials for a memorable stay.') }}
             </p>
             <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-base mt-4">
-                {{ __('Wake up refreshed and ready for your next safari adventure. Whether you are exploring the Serengeti, Lake Manyara, or the Ngorongoro Crater, this is your perfect base camp — comfortable, clean, and warm with Tanzanian hospitality.') }}
+                {{ __('Wake up refreshed and ready for your next safari adventure. Whether you are exploring the Serengeti, Lake Manyara, or the Ngorongoro Crater, this is your perfect base camp comfortable, clean, and warm with Tanzanian hospitality.') }}
             </p>
         </div>
 
@@ -1029,8 +1029,8 @@ const checkoutRoute = "{{ route('booking.checkout', 1) }}";
 
 // ─── Season & Meal Pricing ────────────────────────────────────
 const PRICES = {
-    low:  { BB: 50, HB: 60, FB: 70 },
-    high: { BB: 80, HB: 85, FB: 95 }
+    low:  { BB: 50, HB: 70, FB: 90 },
+    high: { BB: 80, HB: 100, FB: 120 }
 };
 
 let currentMealPlan = "{{ $mealPlan }}";
